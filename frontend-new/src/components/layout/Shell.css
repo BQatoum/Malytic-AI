@@ -1,0 +1,161 @@
+/* ── Corner hex-grid motifs ─────────────────────────────────────────────── */
+.hex-corner {
+  position: fixed;
+  width: 520px;
+  height: 520px;
+  z-index: var(--z-bg);
+  pointer-events: none;
+  background-size: 56px 100px;
+  opacity: 0.55;
+}
+/* Top-left: fades diagonally, dissolves well before the content area */
+.hex-corner--tl {
+  top: 0; left: 0;
+  -webkit-mask-image: linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 25%, rgba(0,0,0,0.1) 48%, transparent 60%);
+  mask-image:         linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 25%, rgba(0,0,0,0.1) 48%, transparent 60%);
+}
+/* Bottom-right: same fade toward top-left */
+.hex-corner--br {
+  bottom: 0; right: 0;
+  -webkit-mask-image: linear-gradient(315deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 25%, rgba(0,0,0,0.1) 48%, transparent 60%);
+  mask-image:         linear-gradient(315deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 25%, rgba(0,0,0,0.1) 48%, transparent 60%);
+}
+
+/* ── Shell wrapper ──────────────────────────────────────────────────────── */
+.shell {
+  position: relative;
+  z-index: var(--z-content);
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+/* ── Nav bar ────────────────────────────────────────────────────────────── */
+.shell-nav {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-nav);
+  background: rgba(7,11,20,0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.shell-nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 26px 48px;
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ── Logo ───────────────────────────────────────────────────────────────── */
+.shell-logo {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.shell-logo:hover { opacity: 1; text-decoration: none; }
+
+.shell-logo__text {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 21px;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+.shell-logo__dot { color: var(--accent); }
+
+/* ── Right cluster ──────────────────────────────────────────────────────── */
+.shell-nav__right {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+/* ── Live API badge ─────────────────────────────────────────────────────── */
+.shell-api-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--r-pill);
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(8px);
+}
+.shell-api-badge__dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--status-done);
+  box-shadow: 0 0 9px rgba(47,191,113,0.9);
+  flex-shrink: 0;
+}
+.shell-api-badge__label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.6);
+}
+
+/* ── Nav link — column layout with 2px red underline bar ──────────────── */
+.shell-nav__link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.shell-nav__link:hover { text-decoration: none; opacity: 1; }
+
+.shell-nav__link-text {
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 15px;
+  color: rgba(255,255,255,0.5);
+  transition: color var(--dur-fast);
+}
+.shell-nav__link.is-active .shell-nav__link-text { color: var(--text-primary); }
+.shell-nav__link:hover .shell-nav__link-text { color: rgba(255,255,255,0.75); }
+
+.shell-nav__link-bar {
+  display: block;
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+  box-shadow: 0 0 10px rgba(225,29,42,0.8);
+  opacity: 0;
+  transform: scaleX(0.5);
+  transition: opacity var(--dur-base), transform var(--dur-base) var(--ease-snap);
+}
+.shell-nav__link.is-active .shell-nav__link-bar {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+/* ── Content ────────────────────────────────────────────────────────────── */
+.shell-content {
+  flex: 1;
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 48px var(--sp-20);
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .shell-nav__inner { padding: 20px 24px; }
+  .shell-content    { padding: 0 24px var(--sp-16); }
+  .shell-api-badge  { display: none; }
+  .hex-corner       { width: 280px; height: 280px; }
+}
+@media (max-width: 480px) {
+  .shell-nav__inner { padding: 16px; }
+  .shell-content    { padding: 0 16px var(--sp-12); }
+}

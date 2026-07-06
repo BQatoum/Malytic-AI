@@ -1,0 +1,34 @@
+.env
+__pycache__/
+*.pyc
+*.db
+.venv/
+venv/
+node_modules/
+uploads/*
+!uploads/.gitkeep
+capa-rules/
+capa-src/
+eicar.com
+*.exe
+
+# malware samples and archives — NEVER commit
+*.zip
+*.exe
+*.dll
+*.Zone.Identifier
+*:Zone.Identifier
+*.bin
+samples/
+
+presentation/
+
+# tool clutter — never commit
+.claude/
+graphify-out/
+.graphifyignore
+
+# additional secret file types
+*.pem
+*.key
+.env.*

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Malware Analysis Pipeline — Results</title>
+</head>
+<body>
+  <h1>Analysis Results</h1>
+  <p id="case-id"></p>
+  <pre id="results">Loading…</pre>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const caseId = params.get('case_id');
+    document.getElementById('case-id').textContent = caseId ? `Case: ${caseId}` : 'No case ID provided.';
+
+    if (caseId) {
+      fetch(`/api/cases/${caseId}`)
+        .then((r) => r.json())
+        .then((data) => {
+          document.getElementById('results').textContent = JSON.stringify(data, null, 2);
+        })
+        .catch((err) => {
+          document.getElementById('results').textContent = `Error: ${err}`;
+        });
+    }
+  </script>
+</body>
+</html>

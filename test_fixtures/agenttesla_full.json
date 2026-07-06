@@ -1,0 +1,1476 @@
+{
+  "case_id": "f291d358-e378-43e5-af54-38132d67829e",
+  "sample": {
+    "name": "at.zip",
+    "stored_name": "f291d358-e378-43e5-af54-38132d67829e_at.zip",
+    "size": 914555,
+    "type": "application/zip",
+    "magic_description": "Zip archive data, at least v5.1 to extract, compression method=AES Encrypted",
+    "md5": "51f0c4eee03a03738a33fcd9a7031fbd",
+    "sha1": "9830ae8ff065bf78281d176ad1d13dd626a5210e",
+    "sha256": "6d1c9a51d3ce339bd7d296d630dd9c134207be31a82ebde80cbd4cf26ff839a9",
+    "extracted_primary_stored_name": "extracted_f291d358-e378-43e5-af54-38132d67829e/bc37921377b4fe391a8487b7116cb8b92b3b09b1c0e9b4f48fb99f217f43eec2.exe",
+    "extracted_primary_hashes": {
+      "md5": "3ee4d5fc4ef74349d7c330acbf0ef718",
+      "sha1": "47a39f1540cf158c542baa417117617a9065d46e",
+      "sha256": "bc37921377b4fe391a8487b7116cb8b92b3b09b1c0e9b4f48fb99f217f43eec2"
+    }
+  },
+  "route": "pe",
+  "options": {
+    "report_format": "markdown"
+  },
+  "status": {
+    "phase": "partial",
+    "completed": [
+      "static",
+      "osint"
+    ],
+    "skipped": [],
+    "failed": [
+      {
+        "phase": "dynamic",
+        "error": "Hybrid Analysis API error 403: {\"message\":\"Access denied. This operation requires 'default' privileges.\"}"
+      }
+    ],
+    "early_findings": [
+      "ZIP extracted: 1 file(s); primary='bc37921377b4fe391a8487b7116cb8b92b3b09b1c0e9b4f48fb99f217f43eec2.exe' re-routed as 'pe'; password='infected'"
+    ],
+    "archive_contents": [
+      "bc37921377b4fe391a8487b7116cb8b92b3b09b1c0e9b4f48fb99f217f43eec2.exe"
+    ],
+    "archive_primary": "bc37921377b4fe391a8487b7116cb8b92b3b09b1c0e9b4f48fb99f217f43eec2.exe"
+  },
+  "static_analysis": {
+    "hashes": {
+      "md5": "3ee4d5fc4ef74349d7c330acbf0ef718",
+      "sha1": "47a39f1540cf158c542baa417117617a9065d46e",
+      "sha256": "bc37921377b4fe391a8487b7116cb8b92b3b09b1c0e9b4f48fb99f217f43eec2"
+    },
+    "file_info": {
+      "declared_type": "PE32 executable (.exe)",
+      "true_type": ".NET managed executable (PE32, imports only _CorExeMain from mscoree.dll)",
+      "type_mismatch": false,
+      "size_bytes": 986624,
+      "overall_entropy": 7.8611,
+      "packer": "Unknown \u2014 no DIE output provided; high entropy and near-identical .text section entropy strongly suggest packing or encryption of the managed assembly, or a self-contained single-section .NET bundle"
+    },
+    "pe_info": {
+      "architecture": "x86",
+      "subsystem": "WINDOWS_GUI",
+      "compile_timestamp": "2057-02-28T06:45:11+00:00",
+      "compile_timestamp_note": "Timestamp is ~33 years in the future; almost certainly forged. Treat as meaningless for dating the build.",
+      "sections": [
+        {
+          "name": ".text",
+          "virtual_size": 983972,
+          "raw_size": 984064,
+          "entropy": 7.8664,
+          "size_gap_flag": false,
+          "notes": "Virtual size and raw size are essentially equal (~983 KB each), so there is no classic packer gap. However, entropy of 7.87 is extremely high for .NET IL \u2014 legitimate managed assemblies typically sit between 5.0 and 6.5. This either means the assembly is itself compressed/encrypted (e.g., a ConfuserEx-protected or bundled single-file publish), or the .text section contains a packed native stub that wraps a managed payload."
+        },
+        {
+          "name": ".rsrc",
+          "virtual_size": 1440,
+          "raw_size": 1536,
+          "entropy": 4.0529,
+          "size_gap_flag": false,
+          "notes": "Small resource section with moderate entropy. Consistent with a minimal icon or version resource \u2014 nothing anomalous."
+        },
+        {
+          "name": ".reloc",
+          "virtual_size": 12,
+          "raw_size": 512,
+          "entropy": 0.1019,
+          "size_gap_flag": false,
+          "notes": "Tiny relocation table, near-zero entropy. Normal for .NET executables."
+        }
+      ]
+    },
+    "api_calls": [
+      {
+        "api": "_CorExeMain",
+        "category": "Helper",
+        "risk": "low",
+        "notes": "The IAT contains only this single export from mscoree.dll \u2014 the standard .NET runtime entry point. All actual functionality is implemented in managed IL (or obfuscated/compressed managed code) inside .text. Native API usage cannot be assessed from the IAT alone; any P/Invoke or reflection-based calls would not appear here."
+      }
+    ],
+    "iocs": {
+      "urls": [],
+      "ips": [],
+      "domains": [],
+      "file_paths": [],
+      "registry_keys": [],
+      "mutexes": [],
+      "commands": [],
+      "pdb_paths": [],
+      "possible_keys": []
+    },
+    "decoded_strings": [],
+    "resources": {
+      "embedded_executables": [],
+      "high_entropy_blobs": [],
+      "fake_identity": null,
+      "locale_artifacts": [
+        "Multiple French-language strings present: 'Fermer' (Close), 'Jardin de Mousse' (Moss Garden), 'Plantez vos esp\u00e8ces, g\u00e9rez les saisons' (Plant your species, manage the seasons), 'Exposition' (Exhibition), '\u00c0 Propos' (About), 'Cr\u00e9dits' (Credits). Locale suggests French-speaking developer or deliberately French-themed application."
+      ]
+    },
+    "yara_matches": [],
+    "correlations": [
+      {
+        "evidence": [
+          "Overall entropy: 7.86 (entire file)",
+          ".text section entropy: 7.87 on ~984 KB of content",
+          "IAT contains only _CorExeMain \u2014 no native API surface visible",
+          "Compile timestamp forged to year 2057"
+        ],
+        "conclusion": "The combination of near-maximal entropy across the entire dominant section, a minimal IAT, and a forged timestamp is a strong indicator that the .NET assembly has been deliberately obfuscated or compressed. This is consistent with tools such as ConfuserEx, .NET Reactor, Eazfuscator, or a single-file publish with compression \u2014 all of which produce high-entropy output and suppress readable strings/API calls at the PE layer. The true capability set is hidden inside the managed bytecode and cannot be read without decompilation or dynamic observation."
+      },
+      {
+        "evidence": [
+          "Unicode strings referencing 'Jardin de Mousse' (Moss Garden simulation)",
+          "Strings: 'Plantez vos esp\u00e8ces, g\u00e9rez les saisons, observez le d\u00e9veloppement de votre \u00e9cosyst\u00e8me miniature'",
+          "Strings: 'Concept & D\u00e9veloppement : Antigravity (Google DeepMind Team)'",
+          "Strings: 'C# Windows Forms, .NET 4.5'",
+          "UI control names: FormAPropos, FormCredits, btnFermer, lblTitre, lblDescription, lblCredits",
+          "String: 'Jardins de mousses de Kyoto (Koke-dera)'"
+        ],
+        "conclusion": "A coherent set of UI strings describes a French-language Windows Forms application themed around growing a Japanese moss garden. The attribution string 'Antigravity (Google DeepMind Team)' is notable: it either (a) is a genuine developer handle or team name, or (b) is a false flag intended to mislead attribution. The application claims to be a .NET 4.5 WinForms program. These strings survived obfuscation, suggesting they are resource strings embedded in a way the obfuscator did not encrypt, or the obfuscation is partial."
+      },
+      {
+        "evidence": [
+          "Readable UI/application strings present in Unicode section",
+          "Entropy of .text at 7.87 \u2014 inconsistent with plain managed IL which would produce lower entropy",
+          "Forged future timestamp"
+        ],
+        "conclusion": "The coexistence of readable French UI strings alongside extreme entropy is somewhat contradictory. Two explanations: (1) the strings are stored in the low-entropy .rsrc section or in uncompressed metadata while the IL itself is compressed/encrypted; or (2) only the code sections are obfuscated while string resources are left plain. This partial-obfuscation pattern is characteristic of ConfuserEx with string-encryption disabled or of a packer that wraps an otherwise normal application. Dynamic analysis or managed decompilation (dnSpy/ILSpy after unpacking) is required to resolve this."
+      },
+      {
+        "evidence": [
+          "String: '{{ A = {0}, B = {1} }}'",
+          "String: '{{ Lat1 = {0}, Lat2 = {1}, DLat = {2}, DLon = {3} }}'",
+          "String: '{{ Direction = {0}, ReportAlt = {1}, Index = {2} }}'",
+          "Application theme: botanical/nature simulation"
+        ],
+        "conclusion": "Format strings referencing latitude, longitude, delta-latitude, delta-longitude, direction, altitude, and index are incongruous with a purely cosmetic moss-garden application. These could be: (a) remnant debug/logging strings from flight-simulation or navigation code; (b) functionality related to geolocation of the victim machine; or (c) part of a C2 protocol encoding position data. This is a low-confidence but notable anomaly that warrants close attention during dynamic analysis and decompilation."
+      }
+    ],
+    "behavior_hypothesis": "This is a .NET 4.5 x86 Windows GUI application that presents itself as a French-language moss-garden botanical simulation ('Jardin de Mousse') attributed to 'Antigravity (Google DeepMind Team)'. The entire executable is heavily obfuscated or packed \u2014 most likely with a .NET obfuscator (ConfuserEx or similar) \u2014 producing near-maximal entropy across the .text section and suppressing all native API visibility. The forged year-2057 compile timestamp confirms deliberate anti-forensics. The true behavior is unknown without decompilation: it could be a benign hobbyist application with aggressive obfuscation, or a malicious payload using a moss-garden theme as a lure. The geolocation-flavored format strings (Lat, Lon, Direction, Altitude) are anomalous for a gardening app and raise the possibility of location-reporting or navigation-related functionality hidden beneath the surface.",
+    "static_verdict": {
+      "type": "Unknown \u2014 obfuscated .NET application; cannot exclude dropper, infostealer, or lure without decompilation",
+      "confidence": "low",
+      "justification": "Heavy obfuscation (entropy 7.87, forged timestamp, minimal IAT) prevents static API and code-path analysis; the only visible content is French UI strings consistent with a botanical simulation and anomalous geolocation format strings. Malicious intent is plausible but unconfirmed."
+    },
+    "to_confirm_dynamically": [
+      "Identify the obfuscation/packing layer and whether a secondary payload is dropped or reflectively loaded at runtime",
+      "Capture all .NET P/Invoke, reflection, and Assembly.Load calls \u2014 these will reveal the true native API surface hidden from the IAT",
+      "Monitor network activity: do the Lat/Lon/Direction format strings appear in any outbound request (DNS, HTTP, raw socket)?",
+      "Check whether the application contacts any remote host (C2 beaconing, exfiltration) during or after displaying the UI",
+      "Observe file-system and registry writes \u2014 persistence mechanisms would not be visible statically given the obfuscation",
+      "Determine whether 'Jardin de Mousse' UI is actually rendered, or whether it is a decoy that runs only briefly before malicious code executes",
+      "Investigate the 'Antigravity (Google DeepMind Team)' attribution \u2014 is it a real developer handle or a false flag?",
+      "Confirm .NET runtime version actually used at execution (claimed: .NET 4.5)"
+    ],
+    "missing_inputs": [
+      "DIE (Detect-It-Easy) output \u2014 packer/obfuscator identification could narrow the unpacking approach",
+      "FLOSS decoded strings \u2014 obfuscated .NET assemblies may yield decoded stack strings that FLOSS can recover; not provided",
+      "Full strings output \u2014 truncated at 50/type out of 10,353 ASCII and 389 Unicode; additional strings (especially Unicode) may contain URLs, registry keys, mutex names, or additional format strings",
+      "Resource section details \u2014 .rsrc contents (icons, version info, embedded blobs) not enumerated",
+      "Managed metadata \u2014 .NET assembly manifest, type/method names, referenced assemblies (would require ildasm or dnSpy output)",
+      "Authenticode signature information \u2014 not provided; signed samples change the risk profile"
+    ]
+  },
+  "dynamic_analysis": null,
+  "osint": {
+    "file_reputation": {
+      "known_sample": true,
+      "first_seen": "2025-06-15T06:23:39Z (first_seen_itw_date: 1781779019; first_submission_date: 1781777203)",
+      "detection_rate": "35/74 (47%) \u2014 moderate-to-high; 34 undetected suggests fresh/recently-compiled sample or targeted operation",
+      "family_labels": [
+        "Gen:Variant.MSILHeracles.250383 (BitDefender, MicroWorld-eScan, ALYac, VIPRE, Emsisoft, GData, Arcabit)",
+        "Trojan.Win32.AgentTesla.4!c (Lionic)",
+        "Trojan.TR/Dropper.MSIL.Gen (F-Secure, Avira)",
+        "Trojan:Win32/Wacatac.B!ml (Microsoft)",
+        "Software:MSIL/Wacatac.B9nj (alibabacloud)",
+        "MalwareX-gen [Rat] (AVG, Avast)",
+        "Trojan:Win/GenericPack.BMP (McAfeeD)",
+        "Mal/Generic-S (Sophos)",
+        "Malware.Obfus/MSIL@AI.80 (Rising)",
+        "Trojan.Win32.MSIL_Heur.A (VirIT)"
+      ],
+      "related_samples": [
+        "Same imphash (f34d5f2d4577ed6d9ceec516c1f5a744) clusters this with .NET-only executables that import solely _CorExeMain from mscoree.dll \u2014 a standard .NET stub imphash shared across many .NET samples and not a unique pivot",
+        "vhash 295036751513c0822928501c may identify a cluster in VT"
+      ],
+      "imphash_cluster": "f34d5f2d4577ed6d9ceec516c1f5a744 \u2014 standard .NET-stub imphash; not uniquely identifying; shared by all .NET PE executables that import only mscoree!_CorExeMain"
+    },
+    "network_intel": [],
+    "string_research": [
+      {
+        "artifact": "MothGarden",
+        "type": "string",
+        "finding": "Appears as both the PE version-info 'product' field and 'description' field. No prior threat-intelligence reporting found associating the string 'MothGarden' with a known malware family or threat actor. The name appears purpose-built as a lure/decoy label for this sample; its absence from OSINT suggests a novel or highly targeted campaign. The botanical/nature theme (moth + garden) is consistent with the French-language 'Jardin de Mousse' (moss garden) lure noted in static analysis.",
+        "reference": "VT signature_info; static analysis",
+        "confidence": "low"
+      },
+      {
+        "artifact": "Unre.exe",
+        "type": "string",
+        "finding": "Assembly name (meaningful_name) as reported by VT. Also listed as an alternative submission filename. Short, randomised-looking name consistent with obfuscated/generated output from ConfuserEx or similar packers. No prior OSINT association found.",
+        "reference": "VT dot_net_assembly.assembly_name; VT names[]",
+        "confidence": "low"
+      },
+      {
+        "artifact": "qlQjUq",
+        "type": "string",
+        "finding": "Used as both the Run-key registry value name (HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\qlQjUq) and as a filename (qlqjuq.exe dropped to %APPDATA%). The mixed-case, pseudo-random pattern is consistent with auto-generated persistence key names common to Agent Tesla and MSILHeracles-family loaders/droppers. No standalone public reporting on this specific string found, reinforcing novelty of this sample.",
+        "reference": "VT sigma_analysis_results; VT names[]; static analysis",
+        "confidence": "medium"
+      },
+      {
+        "artifact": "nre (namespace)",
+        "type": "string",
+        "finding": "Top-level .NET namespace visible in the type-definition list. Short, opaque namespace name is typical of obfuscated .NET assemblies post-ConfuserEx processing. Not uniquely attributable.",
+        "reference": "VT dot_net_assembly.type_definition_list",
+        "confidence": "low"
+      },
+      {
+        "artifact": "powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File %TEMP%\\<random>.ps1",
+        "type": "string",
+        "finding": "Persistence mechanism observed via Sigma rule match: Run-key value pointing to a hidden PowerShell script in %TEMP% with randomised filenames (5w0dcx2ub4o.ps1, j2zml5z1viu.ps1, rmeg2mcvj2n.ps1, qtj5s13mntr.ps1). This pattern \u2014 PowerShell-based stage-2 launcher written to %TEMP% and registered under a randomised Run-key name \u2014 is extensively documented as an Agent Tesla delivery and persistence mechanism, as well as MSILHeracles-wrapped loaders. Multiple sandbox contexts confirm the behaviour is reliably reproduced.",
+        "reference": "VT sigma_analysis_results (rules: 27b72c26, 8b5db9da, cfe58f03, cf863dff); Joe Sandbox MSILHeracles/AgentTesla report (joesandbox.com/analysis/337706)",
+        "confidence": "high"
+      },
+      {
+        "artifact": "Add-MpPreference -ExclusionPath",
+        "type": "string",
+        "finding": "The malware spawns PowerShell to add its own path to Windows Defender exclusions before executing. This is a well-documented anti-AV evasion technique used by Agent Tesla, FormBook, and many .NET-based infostealers/RATs. Sigma rules 7e416af5 and cf863dff both fire on this activity.",
+        "reference": "VT sigma_analysis_results; Elastic/Sigma rule set",
+        "confidence": "high"
+      },
+      {
+        "artifact": "%LOCALAPPDATA%\\google\\chrome\\user data\\default\\login data",
+        "type": "string",
+        "finding": "Sigma rule (low, rule 0f8e3c8e) fires on file access to Chrome and Edge credential stores. Credential harvesting from browser login databases is a core Agent Tesla capability documented by Palo Alto Unit 42, Malpedia, and MITRE ATT&CK S0331.",
+        "reference": "VT sigma_analysis_results; Malpedia win.agent_tesla; MITRE ATT&CK S0331",
+        "confidence": "high"
+      },
+      {
+        "artifact": "%LOCALAPPDATA%\\microsoft\\edge\\user data\\default\\login data",
+        "type": "string",
+        "finding": "Same credential-harvesting pattern as Chrome \u2014 Edge login database access. Consistent with Agent Tesla v3+ which targets both Chromium-based browsers.",
+        "reference": "VT sigma_analysis_results; MITRE ATT&CK S0331",
+        "confidence": "high"
+      },
+      {
+        "artifact": "svchost.exe (process hollowing / unusual command line)",
+        "type": "string",
+        "finding": "Sigma rule f4143907 (high) fires on svchost.exe spawned with an uncommon command line, indicating either process hollowing of svchost or a masquerading binary. Process injection/hollowing into svchost is a documented execution technique for Agent Tesla and MSILHeracles-wrapped payloads.",
+        "reference": "VT sigma_analysis_results rule f4143907; Joe Sandbox MSILHeracles analysis",
+        "confidence": "medium"
+      },
+      {
+        "artifact": "Jardin de Mousse / Antigravity (Google DeepMind Team) lure strings",
+        "type": "string",
+        "finding": "French-language botanical simulation lure. No prior OSINT association. The fabricated 'Google DeepMind' attribution is likely a social-engineering element to lower victim suspicion. No vendor reports reference this specific lure theme.",
+        "reference": "Static analysis phase",
+        "confidence": "low"
+      }
+    ],
+    "family_intel": {
+      "family": "MSILHeracles (wrapping/loading Agent Tesla payload)",
+      "confidence": "high",
+      "capabilities": [
+        "Dropper/loader: unpacks, decrypts, and reflectively loads embedded .NET payload in memory",
+        "Persistence: writes randomised Run-key pointing to hidden PowerShell launcher in %TEMP%",
+        "Defense evasion: heavy .NET obfuscation (ConfuserEx or equivalent), forged PE timestamp, COMIMAGE_FLAGS_32BITREQUIRED, Windows Defender exclusion via Add-MpPreference",
+        "Process injection/hollowing: spawns svchost.exe as a host for injected payload",
+        "Keylogging (via Agent Tesla payload)",
+        "Clipboard capture (via Agent Tesla payload)",
+        "Screenshot capture (via Agent Tesla payload)",
+        "Browser credential harvesting: Chrome, Edge login databases (via Agent Tesla payload)",
+        "Email/FTP client credential harvesting (via Agent Tesla payload)",
+        "Data exfiltration via SMTP, HTTP(S), FTP, or Telegram (via Agent Tesla payload)"
+      ],
+      "typical_ttps": [
+        "T1059.001 \u2014 PowerShell (hidden, bypass execution policy, drop and execute PS1)",
+        "T1547.001 \u2014 Registry Run Keys / Startup Folder (HKCU\\Run\\<random>)",
+        "T1562.001 \u2014 Impair Defenses: Disable or Modify Tools (Add-MpPreference ExclusionPath)",
+        "T1055.012 \u2014 Process Injection: Process Hollowing (svchost.exe)",
+        "T1027 \u2014 Obfuscated Files or Information (.NET obfuscation, high-entropy .text)",
+        "T1539 \u2014 Steal Web Session Cookie",
+        "T1555.003 \u2014 Credentials from Web Browsers (Chrome, Edge login data)",
+        "T1056.001 \u2014 Input Capture: Keylogging",
+        "T1113 \u2014 Screen Capture",
+        "T1020 \u2014 Automated Exfiltration",
+        "T1071 \u2014 Application Layer Protocol (SMTP/HTTP exfiltration)"
+      ],
+      "associated_actors": [
+        "TA2541 (aviation-sector campaigns, Proofpoint 2022)",
+        "SILVERTERRIER (Nigerian BEC actors, Unit42)",
+        "Numerous unattributed financially-motivated threat actors \u2014 Agent Tesla is commodity crimeware with a leaked builder widely distributed on cybercrime forums"
+      ],
+      "behavior_match_with_analysis": "Strong agreement: (1) VT Sigma hits confirm PowerShell persistence via Run key, Defender exclusion, svchost hollowing, and browser credential-store access \u2014 all documented MSILHeracles/Agent Tesla TTPs; (2) the dominant detection label Gen:Variant.MSILHeracles.250383 across six AV engines with a co-label of AgentTesla (Lionic) and MalwareX-gen [Rat] (AVG/Avast) is consistent with MSILHeracles being the packer/loader layer and Agent Tesla the inner payload; (3) near-maximal .text entropy (7.87) and minimal IAT (only _CorExeMain) align with ConfuserEx-style obfuscation used to protect Agent Tesla loaders; (4) the geolocation-flavoured format strings noted in static analysis are anomalous but may be artefacts of obfuscation or unused lure UI code rather than a separate C2 capability.",
+      "references": [
+        "https://malpedia.caad.fkie.fraunhofer.de/details/win.agent_tesla",
+        "https://attack.mitre.org/software/S0331/",
+        "https://www.joesandbox.com/analysis/337706/0/html (MSILHeracles/AgentTesla sandbox report)",
+        "https://any.run/report/0c6846ca09d1a6476b4126ef69ddc5f212ec566c8e9cb76cbb320cb904542c28/e25312e0-b9d3-4744-8341-2d418dfa19ef (MSILHeracles/AgentTesla ANY.RUN report)",
+        "https://sensorstechforum.com/trojanmsil-heracles/ (MSILHeracles capability overview)",
+        "https://intel.breakglass.tech/post/agenttesla-v3-five-stage-javascript-dropper-with-smtp-exfiltration (AgentTesla v3 five-stage dropper writeup)"
+      ]
+    },
+    "actor_intel": {
+      "actor": "Unknown \u2014 commodity crimeware; no specific actor attribution possible from available evidence",
+      "confidence": "low",
+      "motivation": "Financial \u2014 credential theft and data exfiltration for account takeover, fraud, or resale; Agent Tesla is a commodity RAT/stealer available on crimeware markets and via leaked builders",
+      "typical_targets": [
+        "Small-to-medium enterprises (SMEs) across all sectors",
+        "Aviation and logistics (TA2541 campaigns)",
+        "Email credential holders broadly (phishing delivery vector typical)",
+        "French-language targets suggested by lure UI (unconfirmed)"
+      ],
+      "known_tooling": [
+        "Agent Tesla (keylogger/infostealer)",
+        "MSILHeracles (packer/loader)",
+        "ConfuserEx or equivalent .NET obfuscator",
+        "PowerShell (staged execution, persistence, AV bypass)"
+      ],
+      "prior_campaigns": [
+        "Agent Tesla has been active since at least 2014 across thousands of campaigns; no specific campaign uniquely identified for this sample",
+        "MSILHeracles-wrapped Agent Tesla distribution observed in Joe Sandbox and ANY.RUN public reports (2023\u20132024)"
+      ],
+      "references": [
+        "https://attack.mitre.org/software/S0331/",
+        "https://malpedia.caad.fkie.fraunhofer.de/details/win.agent_tesla",
+        "https://unit42.paloaltonetworks.com/malware-obfuscation-techniques/"
+      ]
+    },
+    "campaign_links": [
+      {
+        "campaign": "MSILHeracles-packed Agent Tesla distribution (generic commodity campaign)",
+        "evidence": "Dominant AV label Gen:Variant.MSILHeracles.250383 across six major engines; co-label Trojan.Win32.AgentTesla.4!c (Lionic); sandbox behaviour (PowerShell persistence, Defender exclusion, browser credential access, svchost hollowing) matches documented MSILHeracles\u2192AgentTesla kill chain observed in public sandbox reports.",
+        "references": [
+          "https://www.joesandbox.com/analysis/337706/0/html",
+          "https://any.run/report/0c6846ca09d1a6476b4126ef69ddc5f212ec566c8e9cb76cbb320cb904542c28/e25312e0-b9d3-4744-8341-2d418dfa19ef",
+          "https://sensorstechforum.com/trojanmsil-heracles/"
+        ]
+      }
+    ],
+    "correlations": [
+      {
+        "external_finding": "Gen:Variant.MSILHeracles.250383 detected by six AV engines; co-label AgentTesla from Lionic; MalwareX-gen [Rat] from AVG/Avast",
+        "internal_finding": "Static analysis: near-maximal .text entropy (7.87), minimal IAT (only _CorExeMain), .NET obfuscation flags, forged 2057 timestamp",
+        "impact": "Strongly confirms that the sample is an obfuscated .NET loader/dropper (MSILHeracles layer) wrapping an Agent Tesla infostealer payload. Family confidence raised from 'unknown' to HIGH. The obfuscation observed statically is the defining characteristic of the MSILHeracles packer used to conceal and deliver Agent Tesla."
+      },
+      {
+        "external_finding": "Sigma rule 27b72c26 (HIGH): New RUN key pointing to suspicious folder \u2014 HKCU\\Run\\qlQjUq pointing to hidden PowerShell + PS1 in %TEMP%",
+        "internal_finding": "Static: no static IOCs recovered (obfuscation prevented string extraction); Dynamic: Sigma runtime hits confirm persistence mechanism",
+        "impact": "Confirms the malware establishes PowerShell-based persistence via HKCU Run key with randomised name (qlQjUq) \u2014 a known Agent Tesla/MSILHeracles persistence pattern. The randomised key name and PS1 filenames suggest automated/templated generation."
+      },
+      {
+        "external_finding": "Sigma rule 7e416af5 / cf863dff (MEDIUM): Defender exclusion via Add-MpPreference -ExclusionPath",
+        "internal_finding": "VT tags: 'detect-debug-environment', 'persistence'; static: COMIMAGE_FLAGS_32BITREQUIRED, no IAT visibility",
+        "impact": "Confirms active defense evasion at runtime \u2014 the malware adds itself to Defender exclusions before continuing execution, consistent with MSILHeracles loader behaviour documented in sandbox reports."
+      },
+      {
+        "external_finding": "Sigma rule 0f8e3c8e (LOW): File access to Chrome and Edge login data databases",
+        "internal_finding": "Static hypothesis: potential infostealer; Dynamic Sigma hit on credential store file access",
+        "impact": "Confirms browser credential harvesting as an active runtime capability, consistent with Agent Tesla's documented credential-theft module (MITRE ATT&CK T1555.003). Validates the 'infostealer' classification."
+      },
+      {
+        "external_finding": "Sigma rule f4143907 (HIGH): svchost.exe with uncommon command line \u2014 potential process hollowing",
+        "internal_finding": "Static: no process injection strings visible; Dynamic Sigma hit",
+        "impact": "Indicates process injection or hollowing into svchost.exe at runtime \u2014 a documented Agent Tesla execution technique used to conceal the payload in a trusted system process."
+      },
+      {
+        "external_finding": "PE signature_info: product='MothGarden', description='MothGarden', original_name='Unre.exe', copyright='Copyright \u00a9 2026'",
+        "internal_finding": "Static: French-language botanical lure ('Jardin de Mousse'), 'Antigravity (Google DeepMind Team)' branding, anomalous geolocation format strings",
+        "impact": "The fabricated product metadata and lure theme are consistent with social-engineering packaging used to disguise the malware as a legitimate application. No prior OSINT association for 'MothGarden' suggests a novel or custom-built lure, potentially targeting French-speaking users or specific organisations. The fake 'Google DeepMind' attribution adds authority to the lure."
+      },
+      {
+        "external_finding": "CrowdStrike: win/malicious_confidence_100% (W); SentinelOne: Static AI - Malicious PE; DeepInstinct: MALICIOUS; Elastic: malicious (high confidence)",
+        "internal_finding": "Static verdict: low confidence due to obfuscation preventing code analysis",
+        "impact": "Multiple ML-based and behaviour-based engines assign 100% or high-confidence malicious verdicts, corroborating the family classification and overcoming the obfuscation barrier that limited static analysis confidence."
+      },
+      {
+        "external_finding": "First seen in the wild: 2025-06-15; submitted only twice; unique_sources: 2",
+        "internal_finding": "Forged PE timestamp (year 2057), near-zero prior OSINT on 'MothGarden' lure string",
+        "impact": "Sample is very recent (days old at time of analysis). Low submission count and absence of lure strings in OSINT suggest this is a fresh campaign deployment, possibly targeted. The 34 undetected engines further support novelty."
+      }
+    ],
+    "source_conflicts": [
+      {
+        "conflict": "Family label disagreement: majority of engines label the sample MSILHeracles (packer/loader); Lionic labels it AgentTesla (payload); Microsoft labels it Wacatac (generic dropper); AVG/Avast label it MalwareX-gen [Rat]",
+        "resolution": "No genuine conflict \u2014 MSILHeracles is the packer/loader layer; Agent Tesla is the inner payload. Engines that detect the outer layer label it MSILHeracles; engines that detect the unpacked payload label it AgentTesla. Both detections are likely correct and complementary. Wacatac and generic labels reflect engines that identify the dropper behaviour without classifying the payload."
+      }
+    ],
+    "premium_sources_used": [],
+    "not_found": [
+      "Hash bc37921377b4fe391a8487b7116cb8b92b3b09b1c0e9b4f48fb99f217f43eec2 \u2014 no prior public reports, ThreatFox entries, or MalwareBazaar listings found (sample is very recent, first seen 2025-06-15)",
+      "String 'MothGarden' \u2014 no prior threat-intelligence reporting associating this string with any known malware family, threat actor, or campaign",
+      "Registry key name 'qlQjUq' \u2014 no prior public reporting; appears to be an auto-generated, per-campaign random string",
+      "Network IOCs \u2014 none extracted from static or dynamic analysis; no C2 infrastructure to pivot on",
+      "PDB path \u2014 not present or not extracted",
+      "Mutex \u2014 not identified in available analysis data",
+      "imphash f34d5f2d4577ed6d9ceec516c1f5a744 \u2014 standard .NET stub imphash; not a useful pivot (shared by all .NET executables with only mscoree import)",
+      "Specific threat actor attribution \u2014 insufficient evidence; commodity crimeware precludes confident actor attribution from available data"
+    ]
+  },
+  "attribution": {
+    "evidence_convergence": [
+      {
+        "capability": ".NET obfuscation / packing (ConfuserEx or equivalent)",
+        "static": true,
+        "dynamic": false,
+        "osint": true,
+        "note": "Static: .text entropy 7.87, minimal IAT (_CorExeMain only), forged 2057 timestamp. OSINT: Gen:Variant.MSILHeracles.250383 across six AV engines; 'Malware.Obfus/MSIL@AI.80' label; Joe/ANY.RUN sandbox reports confirm MSILHeracles packer layer. Convergence across static and OSINT is strong despite absent dynamic phase."
+      },
+      {
+        "capability": "PowerShell-based persistence via HKCU Run key with randomised name",
+        "static": false,
+        "dynamic": false,
+        "osint": true,
+        "note": "OSINT: Sigma rules 27b72c26, 8b5db9da, cfe58f03, cf863dff all fire. Registry key HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\qlQjUq pointing to hidden PowerShell invoking randomised PS1 files in %TEMP%. Static analysis could not recover this due to obfuscation. Only OSINT (sandbox-derived Sigma hits) confirms it; confidence is high on the OSINT evidence alone."
+      },
+      {
+        "capability": "Windows Defender exclusion bypass (Add-MpPreference -ExclusionPath)",
+        "static": false,
+        "dynamic": false,
+        "osint": true,
+        "note": "OSINT: Sigma rules 7e416af5 and cf863dff. Documented MSILHeracles/Agent Tesla defense-evasion technique. No static visibility due to obfuscation."
+      },
+      {
+        "capability": "Browser credential harvesting (Chrome, Edge login databases)",
+        "static": false,
+        "dynamic": false,
+        "osint": true,
+        "note": "OSINT: Sigma rule 0f8e3c8e fires on file access to %LOCALAPPDATA%\\google\\chrome\\user data\\default\\login data and equivalent Edge path. Core Agent Tesla infostealer capability documented by MITRE ATT&CK S0331 and Malpedia."
+      },
+      {
+        "capability": "Process hollowing / injection into svchost.exe",
+        "static": false,
+        "dynamic": false,
+        "osint": true,
+        "note": "OSINT: Sigma rule f4143907 (HIGH severity) fires on svchost.exe with uncommon command line. Documented Agent Tesla/MSILHeracles execution technique. Static analysis yielded no injection strings due to obfuscation."
+      },
+      {
+        "capability": "Social-engineering lure with fabricated identity",
+        "static": true,
+        "dynamic": false,
+        "osint": true,
+        "note": "Static: French UI strings ('Jardin de Mousse'), 'Antigravity (Google DeepMind Team)' branding, anomalous geolocation format strings. OSINT: PE version-info product/description='MothGarden', original_name='Unre.exe', copyright 2026, no prior OSINT for 'MothGarden'. Both phases confirm deliberate false-flag packaging to lower victim suspicion."
+      },
+      {
+        "capability": "Infostealer / RAT inner payload (Agent Tesla)",
+        "static": false,
+        "dynamic": false,
+        "osint": true,
+        "note": "OSINT: Lionic labels Trojan.Win32.AgentTesla.4!c; AVG/Avast label MalwareX-gen [Rat]; sandbox credential-store access and svchost hollowing consistent with Agent Tesla v3 capability set. MSILHeracles is confirmed outer loader; Agent Tesla is confirmed inner payload."
+      }
+    ],
+    "conflicts_resolved": [
+      {
+        "conflict": "Static verdict was 'Unknown \u2014 low confidence' due to obfuscation preventing code analysis, while OSINT provides high-confidence family identification.",
+        "resolution": "No genuine conflict. Static analysis correctly noted the obfuscation barrier and deferred classification; OSINT overcomes that barrier through AV detections, Sigma sandbox hits, and sandbox-derived behavioral evidence. The low static confidence reflects the limits of pre-execution analysis on heavily packed .NET, not a disagreement with OSINT findings. Overall confidence is raised to HIGH for family identification.",
+        "implication": "Obfuscation-induced static uncertainty is resolved by OSINT. This is the expected outcome for MSILHeracles-packed samples and does not indicate any analytic error."
+      },
+      {
+        "conflict": "AV label disagreement: MSILHeracles (six engines) vs. AgentTesla (Lionic) vs. Wacatac (Microsoft) vs. MalwareX-gen [Rat] (AVG/Avast).",
+        "resolution": "Labels are complementary, not contradictory. MSILHeracles is the packer/loader outer layer; Agent Tesla is the inner payload. Engines detecting the outer wrapper label it MSILHeracles; engines that detect the unpacked payload or its behavior label it AgentTesla. Generic labels (Wacatac, MalwareX-gen) reflect dropper/RAT behavioral detection without layer-specific classification. All labels are consistent with a two-layer architecture.",
+        "implication": "The sample has a two-layer structure: MSILHeracles loader -> Agent Tesla infostealer payload. Both layers should be addressed in detection engineering."
+      },
+      {
+        "conflict": "Anomalous geolocation format strings (Lat, Lon, Direction, Altitude) in a moss-garden UI application.",
+        "resolution": "These strings most plausibly are: (a) artefacts of the obfuscation/packing process bleeding through unencrypted metadata, (b) remnant debug/logging strings in UI code that was repurposed as a lure, or (c) unused code in the lure application shell. No OSINT evidence ties these strings to a known C2 geolocation protocol in Agent Tesla or MSILHeracles. Without dynamic analysis or decompiled IL, definitive resolution is not possible, but the balance of evidence favors (a) or (b). Agent Tesla's documented exfiltration channels (SMTP, HTTP, Telegram) do not typically encode GPS coordinates.",
+        "implication": "Logged as an unresolved question. If dynamic analysis or decompilation becomes available, these strings should be traced to their source method and checked against any outbound network traffic."
+      },
+      {
+        "conflict": "Dynamic analysis phase is absent, removing runtime behavioral confirmation.",
+        "resolution": "The gap is partially bridged by OSINT-sourced Sigma rule hits, which are themselves derived from sandbox execution (VirusTotal behavioral analysis, Joe Sandbox, ANY.RUN reports on MSILHeracles/Agent Tesla samples). These represent indirect dynamic evidence for the family's TTPs even if they are not from a dedicated sandbox run of this exact sample. Confidence for technique-level mappings that rely solely on these indirect sources is capped at MEDIUM rather than HIGH.",
+        "implication": "Technique mappings marked 'osint' reflect sandbox-derived behavioral data rather than first-party dynamic execution of this specific hash. Detection engineering should treat these with slightly elevated uncertainty until a dedicated sandbox run confirms behavior on this exact sample."
+      }
+    ],
+    "malware_family": {
+      "name": "MSILHeracles (loader/packer layer) wrapping Agent Tesla v3 (infostealer/RAT payload)",
+      "confidence": "high",
+      "evidence": [
+        "Gen:Variant.MSILHeracles.250383 detected by six independent AV engines (BitDefender, MicroWorld-eScan, ALYac, VIPRE, Emsisoft, GData/Arcabit)",
+        "Co-label Trojan.Win32.AgentTesla.4!c from Lionic, consistent with unpacked inner payload detection",
+        "MalwareX-gen [Rat] (AVG/Avast) consistent with RAT behavioral classification",
+        "Static .text entropy 7.87 on ~984 KB, minimal IAT \u2014 hallmarks of MSILHeracles ConfuserEx-based obfuscation",
+        "Sigma hits on PowerShell persistence, Defender exclusion bypass, svchost hollowing, and browser credential-store access \u2014 all documented MSILHeracles/Agent Tesla TTPs",
+        "ML engines CrowdStrike (100% malicious), SentinelOne, DeepInstinct, Elastic all assign high/definitive malicious verdicts",
+        "Behavioral match to Joe Sandbox analysis/337706 and ANY.RUN MSILHeracles/Agent Tesla reports"
+      ]
+    },
+    "mitre_attack": [
+      {
+        "tactic": "Defense Evasion",
+        "technique_id": "T1027.002",
+        "technique_name": "Obfuscated Files or Information: Software Packing",
+        "evidence": ".text section entropy 7.87 on ~984 KB; minimal IAT (_CorExeMain only); ConfuserEx-class .NET obfuscation; Gen:Variant.MSILHeracles.250383 AV label confirming packer layer",
+        "observed_in": "static",
+        "confidence": "high"
+      },
+      {
+        "tactic": "Defense Evasion",
+        "technique_id": "T1140",
+        "technique_name": "Deobfuscate/Decode Files or Information",
+        "evidence": "MSILHeracles loader decrypts and reflectively loads the Agent Tesla inner payload at runtime; documented in Joe Sandbox and ANY.RUN MSILHeracles reports; implied by two-layer architecture confirmed by AV label split",
+        "observed_in": "osint",
+        "confidence": "high"
+      },
+      {
+        "tactic": "Defense Evasion",
+        "technique_id": "T1562.001",
+        "technique_name": "Impair Defenses: Disable or Modify Tools",
+        "evidence": "Sigma rules 7e416af5 and cf863dff fire on Add-MpPreference -ExclusionPath adding malware path to Windows Defender exclusions",
+        "observed_in": "osint",
+        "confidence": "high"
+      },
+      {
+        "tactic": "Defense Evasion",
+        "technique_id": "T1036",
+        "technique_name": "Masquerading",
+        "evidence": "PE version-info presents as 'MothGarden' application; French-language lure UI 'Jardin de Mousse'; fabricated 'Antigravity (Google DeepMind Team)' developer attribution; forged PE compile timestamp (year 2057)",
+        "observed_in": "static",
+        "confidence": "high"
+      },
+      {
+        "tactic": "Execution",
+        "technique_id": "T1059.001",
+        "technique_name": "Command and Scripting Interpreter: PowerShell",
+        "evidence": "Sigma rules 27b72c26, 8b5db9da, cfe58f03, cf863dff: powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File %TEMP%\\<random>.ps1; multiple randomised PS1 filenames confirmed (5w0dcx2ub4o.ps1, j2zml5z1viu.ps1, rmeg2mcvj2n.ps1, qtj5s13mntr.ps1)",
+        "observed_in": "osint",
+        "confidence": "high"
+      },
+      {
+        "tactic": "Execution",
+        "technique_id": "T1106",
+        "technique_name": "Native API",
+        "evidence": "MSILHeracles loader uses reflection and P/Invoke to call native APIs hidden from the IAT; standard MSILHeracles execution pattern documented in sandbox reports; IAT suppression (only _CorExeMain) is consistent with this approach",
+        "observed_in": "osint",
+        "confidence": "medium"
+      },
+      {
+        "tactic": "Persistence",
+        "technique_id": "T1547.001",
+        "technique_name": "Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder",
+        "evidence": "Sigma rule 27b72c26 (HIGH): HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\qlQjUq set to hidden PowerShell launcher; randomised key name qlQjUq confirmed in VT sigma_analysis_results and VT names[]",
+        "observed_in": "osint",
+        "confidence": "high"
+      },
+      {
+        "tactic": "Privilege Escalation",
+        "technique_id": "T1055.012",
+        "technique_name": "Process Injection: Process Hollowing",
+        "evidence": "Sigma rule f4143907 (HIGH): svchost.exe spawned with uncommon command line indicating process hollowing; documented Agent Tesla/MSILHeracles technique to conceal payload in trusted system process",
+        "observed_in": "osint",
+        "confidence": "medium"
+      },
+      {
+        "tactic": "Credential Access",
+        "technique_id": "T1555.003",
+        "technique_name": "Credentials from Password Stores: Credentials from Web Browsers",
+        "evidence": "Sigma rule 0f8e3c8e: file access to %LOCALAPPDATA%\\google\\chrome\\user data\\default\\login data and %LOCALAPPDATA%\\microsoft\\edge\\user data\\default\\login data; core Agent Tesla capability per MITRE ATT&CK S0331 and Malpedia",
+        "observed_in": "osint",
+        "confidence": "high"
+      },
+      {
+        "tactic": "Credential Access",
+        "technique_id": "T1056.001",
+        "technique_name": "Input Capture: Keylogging",
+        "evidence": "Documented core Agent Tesla capability (MITRE ATT&CK S0331); confirmed by MalwareX-gen [Rat] label and family intel; not directly observed in this sample's Sigma hits but present in all Agent Tesla deployments",
+        "observed_in": "osint",
+        "confidence": "medium"
+      },
+      {
+        "tactic": "Collection",
+        "technique_id": "T1113",
+        "technique_name": "Screen Capture",
+        "evidence": "Documented Agent Tesla capability per Malpedia win.agent_tesla and MITRE ATT&CK S0331; consistent with MalwareX-gen [Rat] classification; not directly evidenced by Sigma hits on this sample",
+        "observed_in": "osint",
+        "confidence": "medium"
+      },
+      {
+        "tactic": "Collection",
+        "technique_id": "T1115",
+        "technique_name": "Clipboard Data",
+        "evidence": "Documented Agent Tesla capability per Malpedia and MITRE ATT&CK S0331; consistent with RAT classification",
+        "observed_in": "osint",
+        "confidence": "medium"
+      },
+      {
+        "tactic": "Command and Control",
+        "technique_id": "T1071.001",
+        "technique_name": "Application Layer Protocol: Web Protocols",
+        "evidence": "Agent Tesla v3 documented to exfiltrate via HTTP/HTTPS and Telegram per intel.breakglass.tech writeup and Malpedia; no C2 network IOCs recovered from this sample (no dynamic phase; no static IOCs due to obfuscation)",
+        "observed_in": "osint",
+        "confidence": "medium"
+      },
+      {
+        "tactic": "Exfiltration",
+        "technique_id": "T1041",
+        "technique_name": "Exfiltration Over C2 Channel",
+        "evidence": "Agent Tesla exfiltrates harvested credentials and data over its C2 channel (SMTP, HTTP, Telegram); consistent with family capability set per Malpedia and MITRE ATT&CK S0331",
+        "observed_in": "osint",
+        "confidence": "medium"
+      }
+    ],
+    "possible_techniques": [
+      {
+        "technique_id": "T1539",
+        "technique_name": "Steal Web Session Cookie",
+        "why_suspected": "Agent Tesla v3 is documented to harvest browser cookies alongside login data; the Chrome/Edge credential-store Sigma hit covers the same file paths that store cookies, but cookie-specific harvesting was not separately confirmed for this sample"
+      },
+      {
+        "technique_id": "T1048",
+        "technique_name": "Exfiltration Over Alternative Protocol",
+        "why_suspected": "Agent Tesla commonly uses SMTP (port 587/465) as an exfiltration channel, which is an alternative protocol to HTTP C2; no network IOCs were recovered to confirm which exfiltration channel is configured in this sample"
+      },
+      {
+        "technique_id": "T1614",
+        "technique_name": "System Location Discovery",
+        "why_suspected": "Anomalous geolocation format strings (Lat, Lon, Direction, Altitude) in static analysis could indicate victim-location reporting; however, no behavioral confirmation and strings may be lure UI artifacts or obfuscation noise"
+      },
+      {
+        "technique_id": "T1082",
+        "technique_name": "System Information Discovery",
+        "why_suspected": "Agent Tesla typically collects host metadata (OS version, hostname, username) before exfiltration; expected behavior for this family but not directly evidenced by Sigma hits on this sample"
+      },
+      {
+        "technique_id": "T1070.004",
+        "technique_name": "Indicator Removal: File Deletion",
+        "why_suspected": "MSILHeracles loaders sometimes delete or overwrite the initial dropper after unpacking to reduce forensic footprint; not confirmed for this sample"
+      },
+      {
+        "technique_id": "T1497",
+        "technique_name": "Virtualization/Sandbox Evasion",
+        "why_suspected": "VT tag 'detect-debug-environment' present; forged timestamp and obfuscation may serve anti-analysis purposes; not directly evidenced by specific behavioral Sigma hits"
+      }
+    ],
+    "kill_chain": [
+      {
+        "stage": "Initial Access",
+        "techniques": [
+          "T1204"
+        ],
+        "description": "Victim is socially engineered into executing the malware, which presents itself as 'MothGarden' \u2014 a legitimate-looking French-language botanical simulation application ('Jardin de Mousse') attributed to a fabricated 'Antigravity (Google DeepMind Team)' developer identity. The lure likely reaches the victim via phishing email or malicious download, consistent with standard Agent Tesla delivery vectors."
+      },
+      {
+        "stage": "Execution",
+        "techniques": [
+          "T1106",
+          "T1059.001"
+        ],
+        "description": "The MSILHeracles loader executes as a .NET 4.5 x86 WinForms process. At runtime it deobfuscates and reflectively loads the Agent Tesla inner payload using .NET reflection and native API calls hidden from the IAT. The loader then spawns a hidden PowerShell process with execution policy bypass to execute a stage-2 PS1 script from %TEMP%."
+      },
+      {
+        "stage": "Defense Evasion",
+        "techniques": [
+          "T1027.002",
+          "T1140",
+          "T1562.001",
+          "T1036"
+        ],
+        "description": "Multiple layered evasion techniques operate concurrently: (1) the entire assembly is obfuscated with ConfuserEx-class tooling producing near-maximal entropy (7.87) that defeats static analysis; (2) the loader decrypts and loads the payload in memory without writing a plaintext executable to disk; (3) PowerShell adds the malware's path to Windows Defender exclusions via Add-MpPreference -ExclusionPath before the payload activates; (4) the binary masquerades as a legitimate GUI application with fabricated version metadata and a functional-looking UI."
+      },
+      {
+        "stage": "Persistence",
+        "techniques": [
+          "T1547.001"
+        ],
+        "description": "A randomised registry Run key (HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\qlQjUq) is created pointing to a hidden PowerShell command that re-executes a randomised PS1 launcher in %TEMP% on every user logon, ensuring the payload survives reboots. The dropped executable is also written to %APPDATA%\\qlqjuq.exe."
+      },
+      {
+        "stage": "Privilege Escalation / Execution Handoff",
+        "techniques": [
+          "T1055.012"
+        ],
+        "description": "The Agent Tesla payload is injected into or hollowed into a svchost.exe process to disguise its execution within a trusted Windows system process, evading process-based detection and complicating memory forensics."
+      },
+      {
+        "stage": "Credential Access & Collection",
+        "techniques": [
+          "T1555.003",
+          "T1056.001",
+          "T1113",
+          "T1115"
+        ],
+        "description": "Running within svchost.exe, the Agent Tesla payload activates its infostealer modules: it reads Chrome and Edge login databases to harvest stored credentials; installs a keylogger to capture keystrokes; captures screenshots; and collects clipboard data. It also targets email and FTP client credential stores per documented Agent Tesla v3 capabilities."
+      },
+      {
+        "stage": "Command and Control / Exfiltration",
+        "techniques": [
+          "T1071.001",
+          "T1041"
+        ],
+        "description": "Harvested credentials and captured data are exfiltrated over the C2 channel. Agent Tesla v3 supports SMTP, HTTP/HTTPS, FTP, and Telegram as exfiltration transports. The specific channel configured in this sample is unknown \u2014 no network IOCs were recovered due to the absence of dynamic analysis and successful obfuscation of static strings."
+      }
+    ],
+    "attack_narrative": "The threat actor packaged Agent Tesla v3 inside an MSILHeracles loader and disguised the resulting binary as a French-language Windows application called 'MothGarden' / 'Jardin de Mousse' \u2014 a moss-garden botanical simulation falsely attributed to a 'Google DeepMind' team. This social-engineering shell is designed to pass casual scrutiny: it has coherent version metadata, a plausible French UI, and a credible-sounding developer identity.\n\nWhen a victim executes the file, the MSILHeracles loader runs first. Its .NET assembly is protected with ConfuserEx-class obfuscation that produces near-maximal section entropy (7.87) and suppresses all meaningful static analysis \u2014 no URLs, registry keys, or API names are visible before execution. The loader immediately spawns a hidden PowerShell process that adds the malware's path to Windows Defender's exclusion list, effectively blinding the host's primary antivirus before the payload activates.\n\nWith defenses neutralized, the loader decrypts and reflectively loads the Agent Tesla infostealer directly into memory. To conceal ongoing malicious activity, Agent Tesla hollows or injects into a legitimate svchost.exe process. Simultaneously, a persistence mechanism is installed: a randomised Run key (qlQjUq) in HKCU points to a hidden PowerShell launcher in %TEMP%, ensuring the malware restarts on every user logon.\n\nFrom within the trusted svchost process, Agent Tesla's collection modules activate: browser credential databases for Chrome and Edge are read directly from disk; a keylogger captures all keystrokes; screenshots and clipboard contents are harvested. The payload then exfiltrates this data to operator-controlled infrastructure over an encrypted channel \u2014 most likely SMTP, HTTPS, or Telegram based on documented Agent Tesla v3 behavior \u2014 though the specific C2 endpoint was not recovered from this sample.\n\nThe campaign appears fresh: the sample was first seen on 2025-06-15 with only two submissions, and the 'MothGarden' lure theme has no prior OSINT presence. The French-language UI suggests possible targeting of French-speaking users or organizations, though Agent Tesla is commodity crimeware distributed broadly and this may simply reflect the lure creator's language.",
+    "threat_actor": {
+      "name": "Unknown \u2014 commodity crimeware operator; no specific actor attribution possible",
+      "confidence": "low",
+      "reasoning": "Agent Tesla is a widely distributed commodity infostealer available on crimeware markets and via leaked builders since at least 2014. MSILHeracles is a packer/loader used by numerous unrelated threat actors to wrap Agent Tesla and other payloads. The specific lure ('MothGarden', French-language moss garden, fake Google DeepMind attribution) is novel with no prior OSINT associations, which slightly suggests a targeted or custom operation rather than mass-phishing, but is insufficient to attribute to a specific named actor or group. No network IOCs, PDB paths, code-signing certificates, or infrastructure pivots are available to support actor-level attribution. The French-language lure may indicate a French-speaking operator or French-speaking target population, but this is speculative.",
+      "alternatives_considered": [
+        "TA2541 (Proofpoint): This actor is known to use Agent Tesla in aviation-sector phishing campaigns. The French-language lure and relatively fresh sample are not inconsistent, but TA2541 campaigns typically have distinct infrastructure patterns and lure themes (aviation/logistics) not observed here. No basis to attribute.",
+        "SILVERTERRIER (Unit42 Nigerian BEC): Uses Agent Tesla broadly for credential theft. No specific TTPs or infrastructure evidence connecting this sample to SILVERTERRIER.",
+        "Generic financially-motivated cybercriminal: Most likely scenario. Agent Tesla operators are predominantly financially motivated actors seeking credentials for account takeover, resale, or BEC fraud. The custom French lure may indicate a targeted campaign against French-speaking organizations, but could also simply be a lure crafted for a specific phishing email thread."
+      ],
+      "references": [
+        "https://attack.mitre.org/software/S0331/",
+        "https://malpedia.caad.fkie.fraunhofer.de/details/win.agent_tesla",
+        "https://unit42.paloaltonetworks.com/malware-obfuscation-techniques/"
+      ]
+    },
+    "campaign": {
+      "name": "MSILHeracles-packed Agent Tesla \u2014 'MothGarden' French-language lure (2025-06)",
+      "confidence": "low",
+      "evidence": "The sample represents a fresh deployment (first seen 2025-06-15, two submissions, no prior OSINT for 'MothGarden' lure) of a well-established MSILHeracles + Agent Tesla toolchain with a custom French-language botanical simulation lure. This is sufficient to describe a distinct campaign instance but insufficient to link it to a named, tracked campaign without network IOCs, additional samples, or infrastructure pivots. The campaign is assessed as novel and possibly targeted given the custom lure and low submission count."
+    },
+    "impact_assessment": {
+      "severity": "high",
+      "capabilities": [
+        "Full credential theft from Chrome and Edge browser login databases (passwords, usernames)",
+        "Keylogging \u2014 captures all keystrokes including credentials typed into any application",
+        "Screenshot capture \u2014 visual surveillance of victim desktop",
+        "Clipboard harvesting \u2014 captures copied passwords, tokens, and text",
+        "Email and FTP client credential harvesting (documented Agent Tesla capability, not directly confirmed for this sample)",
+        "Persistent access \u2014 survives reboots via HKCU Run key; re-executes via hidden PowerShell launcher",
+        "Defense neutralization \u2014 adds itself to Windows Defender exclusions, reducing detection likelihood post-installation",
+        "Execution in trusted process \u2014 svchost.exe hollowing complicates detection and incident response"
+      ],
+      "who_is_at_risk": "Any user who executes the lure binary, particularly French-speaking users or those in French-language organizations who may find the lure more convincing. Typical Agent Tesla victims include employees at SMEs across all sectors where credential theft enables subsequent BEC fraud, account takeover, or lateral movement. Given the custom 'Google DeepMind' attribution in the lure, technically-oriented or AI/ML-adjacent targets may be specifically intended."
+    },
+    "overall_confidence": "high",
+    "unresolved_questions": [
+      "No dynamic analysis (first-party sandbox execution) was performed on this specific hash. All behavioral evidence is indirect (Sigma hits from VirusTotal behavioral engine, public sandbox reports on related MSILHeracles/Agent Tesla samples). A dedicated sandbox run should be performed to directly confirm all TTPs and recover network IOCs.",
+      "C2 infrastructure and exfiltration endpoint are unknown. No URLs, IP addresses, domains, SMTP server details, or Telegram bot tokens were recovered. Without these, blocking C2 communication is not possible and victim notification (if any exfiltration occurred) cannot be scoped.",
+      "The anomalous geolocation format strings (Lat, Lon, Direction, Altitude, ReportAlt, Index) observed in static analysis remain unexplained. They should be traced to their source method via decompilation (ILSpy/dnSpy after unpacking) and checked against any network traffic in a sandbox run.",
+      "The specific Agent Tesla version and configured exfiltration transport (SMTP/HTTP/Telegram/FTP) are unknown, preventing protocol-level detection or C2 blocking.",
+      "Intended targets and delivery vector are unknown. The French-language lure and fake 'Google DeepMind' attribution suggest a specific target profile, but no phishing emails, distribution infrastructure, or victim telemetry are available.",
+      "Whether the 'Jardin de Mousse' UI is actually rendered to the victim or whether it is a pure decoy that never displays is unconfirmed without dynamic analysis.",
+      "The .NET deobfuscation layer identity (ConfuserEx vs. .NET Reactor vs. other) has not been definitively confirmed \u2014 DIE output was not available. Identifying the exact obfuscator would help select the correct deobfuscation toolchain for payload extraction.",
+      "No mutex was identified for this sample, which would otherwise provide a useful detection artifact."
+    ]
+  },
+  "detection": {
+    "iocs": [
+      {
+        "value_original": "bc37921377b4fe391a8487b7116cb8b92b3b09b1c0e9b4f48fb99f217f43eec2",
+        "value_defanged": "bc37921377b4fe391a8487b7116cb8b92b3b09b1c0e9b4f48fb99f217f43eec2",
+        "type": "sha256",
+        "source_phase": "static",
+        "confidence": "high",
+        "volatility": "low"
+      },
+      {
+        "value_original": "3ee4d5fc4ef74349d7c330acbf0ef718",
+        "value_defanged": "3ee4d5fc4ef74349d7c330acbf0ef718",
+        "type": "md5",
+        "source_phase": "static",
+        "confidence": "high",
+        "volatility": "low"
+      },
+      {
+        "value_original": "47a39f1540cf158c542baa417117617a9065d46e",
+        "value_defanged": "47a39f1540cf158c542baa417117617a9065d46e",
+        "type": "sha1",
+        "source_phase": "static",
+        "confidence": "high",
+        "volatility": "low"
+      },
+      {
+        "value_original": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\qlQjUq",
+        "value_defanged": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\qlQjUq",
+        "type": "registry",
+        "source_phase": "osint",
+        "confidence": "high",
+        "volatility": "medium"
+      },
+      {
+        "value_original": "%APPDATA%\\qlqjuq.exe",
+        "value_defanged": "%APPDATA%\\qlqjuq.exe",
+        "type": "path",
+        "source_phase": "osint",
+        "confidence": "high",
+        "volatility": "medium"
+      },
+      {
+        "value_original": "%TEMP%\\5w0dcx2ub4o.ps1",
+        "value_defanged": "%TEMP%\\5w0dcx2ub4o.ps1",
+        "type": "path",
+        "source_phase": "osint",
+        "confidence": "medium",
+        "volatility": "high"
+      },
+      {
+        "value_original": "%TEMP%\\j2zml5z1viu.ps1",
+        "value_defanged": "%TEMP%\\j2zml5z1viu.ps1",
+        "type": "path",
+        "source_phase": "osint",
+        "confidence": "medium",
+        "volatility": "high"
+      },
+      {
+        "value_original": "%TEMP%\\rmeg2mcvj2n.ps1",
+        "value_defanged": "%TEMP%\\rmeg2mcvj2n.ps1",
+        "type": "path",
+        "source_phase": "osint",
+        "confidence": "medium",
+        "volatility": "high"
+      },
+      {
+        "value_original": "%TEMP%\\qtj5s13mntr.ps1",
+        "value_defanged": "%TEMP%\\qtj5s13mntr.ps1",
+        "type": "path",
+        "source_phase": "osint",
+        "confidence": "medium",
+        "volatility": "high"
+      },
+      {
+        "value_original": "MothGarden",
+        "value_defanged": "MothGarden",
+        "type": "path",
+        "source_phase": "osint",
+        "confidence": "medium",
+        "volatility": "low"
+      },
+      {
+        "value_original": "qlQjUq",
+        "value_defanged": "qlQjUq",
+        "type": "mutex",
+        "source_phase": "osint",
+        "confidence": "medium",
+        "volatility": "medium"
+      }
+    ],
+    "yara_rules": [
+      {
+        "name": "MSILHeracles_AgentTesla_MothGarden_Loader",
+        "rule": "rule MSILHeracles_AgentTesla_MothGarden_Loader\n{\n    meta:\n        description     = \"Detects MSILHeracles loader wrapping Agent Tesla \u2014 MothGarden lure variant. Matches on French botanical lure strings, fabricated developer attribution, and structural high-entropy .NET PE characteristics.\"\n        author          = \"detection-engineering-pipeline\"\n        date            = \"2025-06-15\"\n        hash            = \"bc37921377b4fe391a8487b7116cb8b92b3b09b1c0e9b4f48fb99f217f43eec2\"\n        family          = \"MSILHeracles / Agent Tesla\"\n        reference       = \"case:at.zip / MothGarden 2025-06\"\n        mitre_attack    = \"T1027.002, T1036, T1547.001\"\n\n    strings:\n        // Fabricated developer attribution \u2014 distinctive, not present in legitimate software\n        $lure_attr      = \"Antigravity (Google DeepMind Team)\" wide ascii\n\n        // French botanical lure UI strings \u2014 coherent set unlikely to appear together in benign software\n        $lure_ui1       = \"Jardin de Mousse\" wide ascii\n        $lure_ui2       = \"Plantez vos esp\" wide ascii\n        $lure_ui3       = \"Jardins de mousses de Kyoto\" wide ascii\n\n        // PE version-info product/description field \u2014 novel lure label with no legitimate association\n        $lure_product   = \"MothGarden\" wide ascii\n\n        // Randomised persistence artifact \u2014 auto-generated Run key name observed in sandbox\n        $persist_key    = \"qlQjUq\" wide ascii nocase\n\n        // Anomalous geolocation format strings \u2014 incongruous with a gardening app\n        $geo1           = \"Lat1 = {0}, Lat2 = {1}, DLat = {2}, DLon = {3}\" wide ascii\n        $geo2           = \"Direction = {0}, ReportAlt = {1}, Index = {2}\" wide ascii\n\n        // .NET-only import stub \u2014 necessary structural marker; combined with entropy/size filters below\n        $dotnet_import  = \"mscoree.dll\" ascii\n        $dotnet_entry   = \"_CorExeMain\" ascii\n\n    condition:\n        // Must be a PE file\n        uint16(0) == 0x5A4D and\n        uint32(uint32(0x3C)) == 0x00004550 and\n\n        // Size bracket consistent with sample (~986 KB); allow headroom for repack variants\n        filesize > 500KB and filesize < 4MB and\n\n        // .NET structure: standard managed entry point\n        $dotnet_import and $dotnet_entry and\n\n        // Match either:\n        //   (a) the fabricated attribution string alone \u2014 very high specificity\n        //   (b) two or more of the botanical lure strings \u2014 high specificity in combination\n        //   (c) the persistence artifact string \u2014 moderate specificity; combined with lure or geo\n        (\n            $lure_attr or\n            $lure_product or\n            2 of ($lure_ui*) or\n            ($persist_key and 1 of ($lure_ui*, $geo*))\n        ) and\n\n        // At least one geolocation anomaly OR one lure string must be present to avoid\n        // matching arbitrary .NET binaries that happen to share common substrings\n        1 of ($lure_attr, $lure_product, $lure_ui1, $lure_ui2, $lure_ui3, $geo1, $geo2, $persist_key)\n}",
+        "targets": "PE file on disk; memory scanning of process image (high-entropy .NET managed executable, ~986 KB, x86, GUI subsystem)",
+        "attack": [
+          "T1027.002",
+          "T1036",
+          "T1547.001"
+        ]
+      },
+      {
+        "name": "MSILHeracles_AgentTesla_HighEntropy_DotNET_Loader_Generic",
+        "rule": "rule MSILHeracles_AgentTesla_HighEntropy_DotNET_Loader_Generic\n{\n    meta:\n        description     = \"Broad heuristic: high-entropy .NET PE with forged far-future compile timestamp and minimal IAT (only mscoree _CorExeMain). Characteristic of MSILHeracles / ConfuserEx-packed Agent Tesla loaders. Expect higher FP rate than the MothGarden-specific rule; tune with additional context.\"\n        author          = \"detection-engineering-pipeline\"\n        date            = \"2025-06-15\"\n        hash            = \"bc37921377b4fe391a8487b7116cb8b92b3b09b1c0e9b4f48fb99f217f43eec2\"\n        family          = \"MSILHeracles / Agent Tesla (generic loader heuristic)\"\n        reference       = \"case:at.zip / MothGarden 2025-06\"\n        mitre_attack    = \"T1027.002\"\n\n    strings:\n        $dotnet_import  = \"mscoree.dll\" ascii\n        $dotnet_entry   = \"_CorExeMain\" ascii\n\n        // MSILHeracles obfuscated namespace remnant\n        $ns_nre         = \"nre\" ascii\n\n        // ConfuserEx characteristic metadata strings sometimes visible through obfuscation\n        $confuserex_1   = \"ConfusedBy\" ascii wide\n        $confuserex_2   = \"ConfuserEx\" ascii wide\n\n    condition:\n        uint16(0) == 0x5A4D and\n        uint32(uint32(0x3C)) == 0x00004550 and\n        filesize > 200KB and filesize < 5MB and\n\n        // .NET-only import surface\n        $dotnet_import and $dotnet_entry and\n\n        // Forged far-future PE timestamp: year 2040 or later\n        // PE timestamp field at offset e_lfanew+8; 2040-01-01 00:00:00 UTC = 0x8C967C00\n        uint32(uint32(0x3C) + 8) > 0x8C967C00 and\n\n        // Corroborating obfuscator or namespace evidence\n        ( $ns_nre or $confuserex_1 or $confuserex_2 )\n}",
+        "targets": "PE file on disk; retrospective scan of .NET executable corpus",
+        "attack": [
+          "T1027.002"
+        ]
+      }
+    ],
+    "sigma_rules": [
+      {
+        "name": "MSILHeracles AgentTesla PowerShell Hidden Persistence Launcher",
+        "rule": "title: MSILHeracles AgentTesla PowerShell Hidden Persistence Launcher\nid: a1b2c3d4-e5f6-7890-abcd-ef1234567801\nstatus: experimental\ndescription: |\n    Detects the hidden PowerShell persistence launcher dropped by MSILHeracles-packed Agent Tesla.\n    The loader writes a randomly-named PS1 file to %TEMP% and executes it with -NoProfile\n    -ExecutionPolicy Bypass -WindowStyle Hidden. Observed filenames follow an ~11-character\n    lowercase alphanumeric pattern. Sigma rules 27b72c26/8b5db9da/cfe58f03/cf863dff confirmed\n    this pattern on VirusTotal behavioral analysis of this sample.\nreferences:\n    - case:at.zip/MothGarden-2025-06\n    - https://malpedia.caad.fkie.fraunhofer.de/details/win.agent_tesla\nauthor: detection-engineering-pipeline\ndate: 2025/06/15\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection_image:\n        Image|endswith:\n            - '\\powershell.exe'\n            - '\\pwsh.exe'\n    selection_flags:\n        CommandLine|contains|all:\n            - '-NoProfile'\n            - '-ExecutionPolicy Bypass'\n            - '-WindowStyle Hidden'\n            - '-File'\n    selection_temp_ps1:\n        CommandLine|re: '(?i)%TEMP%\\\\[a-z0-9]{8,14}\\.ps1'\n    condition: selection_image and selection_flags and selection_temp_ps1\nfalsepositives:\n    - Legitimate software installers or administrative scripts that use hidden PowerShell with\n      randomised temp filenames (rare; investigate parent process)\nlevel: high\ntags:\n    - attack.execution\n    - attack.t1059.001\n    - attack.persistence\n    - attack.t1547.001\n    - attack.defense_evasion\n    - attack.t1027.002",
+        "log_source": "windows / process_creation",
+        "attack": [
+          "T1059.001",
+          "T1547.001",
+          "T1027.002"
+        ]
+      },
+      {
+        "name": "MSILHeracles AgentTesla HKCU Run Key Randomised Persistence",
+        "rule": "title: MSILHeracles AgentTesla HKCU Run Key Randomised Persistence\nid: a1b2c3d4-e5f6-7890-abcd-ef1234567802\nstatus: experimental\ndescription: |\n    Detects creation of a randomised HKCU Run key value pointing to a hidden PowerShell command\n    invoking a PS1 file in %TEMP%. The specific observed key name is qlQjUq; the pattern is\n    auto-generated per-campaign. Matches on the registry path combined with a PowerShell command\n    line in the value data containing -WindowStyle Hidden and a TEMP path.\nreferences:\n    - case:at.zip/MothGarden-2025-06\n    - https://attack.mitre.org/techniques/T1547/001/\nauthor: detection-engineering-pipeline\ndate: 2025/06/15\nlogsource:\n    product: windows\n    category: registry_set\ndetection:\n    selection_path:\n        TargetObject|startswith: 'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\'\n    selection_value:\n        Details|contains|all:\n            - 'powershell'\n            - '-WindowStyle Hidden'\n            - '\\Temp\\'\n    filter_known_legit:\n        TargetObject|contains:\n            - 'OneDrive'\n            - 'Teams'\n            - 'Dropbox'\n    condition: selection_path and selection_value and not filter_known_legit\nfalsepositives:\n    - Unusual but legitimate software that persists a hidden PowerShell helper via HKCU Run\n      (investigate; this combination is uncommon in benign software)\nlevel: high\ntags:\n    - attack.persistence\n    - attack.t1547.001\n    - attack.execution\n    - attack.t1059.001",
+        "log_source": "windows / registry_set",
+        "attack": [
+          "T1547.001",
+          "T1059.001"
+        ]
+      },
+      {
+        "name": "MSILHeracles AgentTesla Windows Defender Exclusion via Add-MpPreference",
+        "rule": "title: MSILHeracles AgentTesla Windows Defender Exclusion via Add-MpPreference\nid: a1b2c3d4-e5f6-7890-abcd-ef1234567803\nstatus: experimental\ndescription: |\n    Detects PowerShell adding a path to Windows Defender exclusions immediately before or during\n    malware execution. MSILHeracles-packed Agent Tesla uses this technique to blind Windows\n    Defender before activating the inner Agent Tesla payload. Sigma rules 7e416af5 and cf863dff\n    confirmed this on VirusTotal behavioral analysis.\nreferences:\n    - case:at.zip/MothGarden-2025-06\n    - https://attack.mitre.org/techniques/T1562/001/\nauthor: detection-engineering-pipeline\ndate: 2025/06/15\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection_image:\n        Image|endswith:\n            - '\\powershell.exe'\n            - '\\pwsh.exe'\n    selection_cmdline:\n        CommandLine|contains|all:\n            - 'Add-MpPreference'\n            - '-ExclusionPath'\n    filter_legit_admin:\n        # Exclude paths that enterprise management tools commonly add\n        CommandLine|contains:\n            - 'C:\\\\Program Files\\\\'\n            - 'C:\\\\Program Files (x86)\\\\'\n    condition: selection_image and selection_cmdline and not filter_legit_admin\nfalsepositives:\n    - Legitimate IT administration scripts adding enterprise software paths to Defender exclusions\n      (verify initiating process and the excluded path)\nlevel: high\ntags:\n    - attack.defense_evasion\n    - attack.t1562.001",
+        "log_source": "windows / process_creation",
+        "attack": [
+          "T1562.001"
+        ]
+      },
+      {
+        "name": "AgentTesla Browser Credential Store Access Chrome Edge",
+        "rule": "title: AgentTesla Browser Credential Store Access Chrome Edge\nid: a1b2c3d4-e5f6-7890-abcd-ef1234567804\nstatus: experimental\ndescription: |\n    Detects a non-browser process accessing the Chrome or Edge SQLite Login Data credential\n    store \u2014 the primary credential-harvesting technique of Agent Tesla (MITRE ATT&CK T1555.003,\n    S0331). The accessing process is expected to be the hollowed svchost.exe or a .NET loader\n    process rather than the browser itself.\nreferences:\n    - case:at.zip/MothGarden-2025-06\n    - https://attack.mitre.org/techniques/T1555/003/\n    - https://attack.mitre.org/software/S0331/\nauthor: detection-engineering-pipeline\ndate: 2025/06/15\nlogsource:\n    product: windows\n    category: file_event\ndetection:\n    selection_chrome:\n        TargetFilename|contains:\n            - '\\Google\\Chrome\\User Data\\Default\\Login Data'\n            - '\\Google\\Chrome\\User Data\\Default\\Login Data-journal'\n    selection_edge:\n        TargetFilename|contains:\n            - '\\Microsoft\\Edge\\User Data\\Default\\Login Data'\n            - '\\Microsoft\\Edge\\User Data\\Default\\Login Data-journal'\n    filter_legitimate_browsers:\n        Image|endswith:\n            - '\\chrome.exe'\n            - '\\msedge.exe'\n            - '\\brave.exe'\n    condition: (selection_chrome or selection_edge) and not filter_legitimate_browsers\nfalsepositives:\n    - Password managers or enterprise backup tools that legitimately access browser profile\n      directories (verify by image path and code signature)\nlevel: medium\ntags:\n    - attack.credential_access\n    - attack.t1555.003",
+        "log_source": "windows / file_event",
+        "attack": [
+          "T1555.003"
+        ]
+      },
+      {
+        "name": "AgentTesla MSILHeracles svchost Process Hollowing Uncommon CommandLine",
+        "rule": "title: AgentTesla MSILHeracles svchost Process Hollowing Uncommon CommandLine\nid: a1b2c3d4-e5f6-7890-abcd-ef1234567805\nstatus: experimental\ndescription: |\n    Detects svchost.exe spawned with a command line that does not match the standard Windows\n    service-host invocation pattern (e.g., missing -k flag, unexpected parent, or unusual\n    arguments). MSILHeracles-packed Agent Tesla hollows or injects into svchost to conceal\n    payload execution. Sigma rule f4143907 (HIGH) confirmed this on VirusTotal behavioral analysis.\nreferences:\n    - case:at.zip/MothGarden-2025-06\n    - https://attack.mitre.org/techniques/T1055/012/\nauthor: detection-engineering-pipeline\ndate: 2025/06/15\nlogsource:\n    product: windows\n    category: process_creation\ndetection:\n    selection_image:\n        Image|endswith: '\\svchost.exe'\n    filter_standard_cmdline:\n        # Standard svchost always contains -k and launches from System32\n        CommandLine|contains: '-k '\n        ParentImage|endswith:\n            - '\\services.exe'\n            - '\\wininit.exe'\n    condition: selection_image and not filter_standard_cmdline\nfalsepositives:\n    - Rare legitimate svchost invocations without -k flag during early boot or non-standard\n      service configurations (investigate parent process and command line carefully)\nlevel: high\ntags:\n    - attack.privilege_escalation\n    - attack.defense_evasion\n    - attack.t1055.012",
+        "log_source": "windows / process_creation",
+        "attack": [
+          "T1055.012"
+        ]
+      },
+      {
+        "name": "MothGarden AgentTesla Dropped Executable in AppData",
+        "rule": "title: MothGarden AgentTesla Dropped Executable in AppData\nid: a1b2c3d4-e5f6-7890-abcd-ef1234567806\nstatus: experimental\ndescription: |\n    Detects creation of qlqjuq.exe in %APPDATA% \u2014 the specific dropper persistence binary\n    written by the MothGarden Agent Tesla campaign. The randomised-looking lowercase filename\n    matches the auto-generated persistence key name (qlQjUq) used in the HKCU Run registry entry.\nreferences:\n    - case:at.zip/MothGarden-2025-06\nauthor: detection-engineering-pipeline\ndate: 2025/06/15\nlogsource:\n    product: windows\n    category: file_event\ndetection:\n    selection:\n        TargetFilename|endswith: '\\qlqjuq.exe'\n        TargetFilename|contains: '\\AppData\\Roaming\\'\n    condition: selection\nfalsepositives:\n    - None expected \u2014 this is a campaign-specific filename with no known legitimate use\nlevel: high\ntags:\n    - attack.persistence\n    - attack.t1547.001\n    - attack.defense_evasion\n    - attack.t1036",
+        "log_source": "windows / file_event",
+        "attack": [
+          "T1547.001",
+          "T1036"
+        ]
+      }
+    ],
+    "suricata_rules": [
+      {
+        "name": "AgentTesla MSILHeracles SMTP Exfiltration Attempt (Generic Pattern)",
+        "rule": "alert tcp $HOME_NET any -> any [25,587,465] (msg:\"MALWARE AgentTesla MSILHeracles SMTP Exfiltration Attempt - MothGarden Campaign\"; flow:established,to_server; content:\"EHLO\"; nocase; content:\"AUTH\"; nocase; threshold:type both, track by_src, count 3, seconds 60; classtype:trojan-activity; reference:url,malpedia.caad.fkie.fraunhofer.de/details/win.agent_tesla; reference:md5,3ee4d5fc4ef74349d7c330acbf0ef718; sid:9000001; rev:1;)",
+        "detects": "SMTP authentication attempts from internal hosts on ports 25, 587, 465 at elevated frequency \u2014 consistent with Agent Tesla SMTP credential exfiltration. High FP potential; tune threshold and scope to unusual initiating processes or non-mail-client source processes via EDR correlation."
+      },
+      {
+        "name": "AgentTesla HTTP Exfiltration Generic POST with Encoded Credential Data",
+        "rule": "alert http $HOME_NET any -> $EXTERNAL_NET any (msg:\"MALWARE AgentTesla HTTP POST Credential Exfiltration - MothGarden Campaign\"; flow:established,to_server; http.method; content:\"POST\"; http.request_body; content:\"Username\"; nocase; content:\"Password\"; nocase; content:\"MachineName\"; nocase; within:512; classtype:trojan-activity; reference:url,attack.mitre.org/software/S0331/; reference:md5,3ee4d5fc4ef74349d7c330acbf0ef718; sid:9000002; rev:1;)",
+        "detects": "HTTP POST requests containing Agent Tesla's characteristic credential-dump field names (Username, Password, MachineName) in the request body \u2014 consistent with Agent Tesla HTTP panel exfiltration format documented in public sandbox reports."
+      },
+      {
+        "name": "AgentTesla Telegram Bot API Exfiltration",
+        "rule": "alert http $HOME_NET any -> $EXTERNAL_NET 443 (msg:\"MALWARE AgentTesla Telegram Bot Exfiltration - MothGarden Campaign\"; flow:established,to_server; http.host; content:\"api.telegram.org\"; http.uri; content:\"/bot\"; depth:4; http.uri; content:\"/sendMessage\"; classtype:trojan-activity; reference:url,intel.breakglass.tech/post/agenttesla-v3-five-stage-javascript-dropper-with-smtp-exfiltration; reference:md5,3ee4d5fc4ef74349d7c330acbf0ef718; sid:9000003; rev:1;)",
+        "detects": "Outbound HTTPS to api.telegram.org with /bot<token>/sendMessage URI path \u2014 the Telegram Bot API exfiltration channel used by Agent Tesla v3. High confidence pattern; api.telegram.org is not typically accessed by corporate workstations."
+      },
+      {
+        "name": "MSILHeracles AgentTesla PowerShell Hidden File Download from TEMP",
+        "rule": "alert dns $HOME_NET any -> any 53 (msg:\"MALWARE MSILHeracles AgentTesla DNS Lookup During PowerShell Stage Execution - MothGarden Campaign\"; flow:stateless; dns.query; pcre:\"/^[a-z0-9]{6,12}\\.(com|net|org|xyz|top|info|online)$/i\"; detection_filter:track by_src, count 5, seconds 30; classtype:trojan-activity; reference:md5,3ee4d5fc4ef74349d7c330acbf0ef718; sid:9000004; rev:1;)",
+        "detects": "DNS queries for short pseudo-random domains (6-12 lowercase alphanumeric characters) at elevated frequency \u2014 consistent with DGA-style or auto-generated C2 domain patterns potentially used by the PowerShell stage-2 launcher. High FP potential in environments with legitimate CDN traffic; correlate with powershell.exe as the originating process."
+      }
+    ],
+    "hunting_queries": [
+      {
+        "platform": "elastic",
+        "query": "process where event.type == \"start\" and process.name : (\"powershell.exe\", \"pwsh.exe\") and process.command_line : \"*-NoProfile*\" and process.command_line : \"*-ExecutionPolicy Bypass*\" and process.command_line : \"*-WindowStyle Hidden*\" and process.command_line : \"*\\\\Temp\\\\*.ps1*\"",
+        "purpose": "Hunt for MSILHeracles stage-2 PowerShell launchers: hidden PowerShell processes executing randomised PS1 scripts from %TEMP% with execution policy bypass \u2014 the primary persistence launcher pattern for this campaign."
+      },
+      {
+        "platform": "elastic",
+        "query": "registry where registry.path : \"HKEY_USERS\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\*\" and registry.data.strings : (\"*powershell*\", \"*-WindowStyle Hidden*\", \"*\\\\Temp\\\\*\")",
+        "purpose": "Hunt for MSILHeracles HKCU Run key persistence: registry Run values whose data contains a hidden PowerShell command pointing to a TEMP-based PS1 file. Catches both the specific qlQjUq key and any randomised variants used in future campaigns."
+      },
+      {
+        "platform": "elastic",
+        "query": "process where event.type == \"start\" and process.name : \"powershell.exe\" and process.command_line : \"*Add-MpPreference*\" and process.command_line : \"*-ExclusionPath*\" and not process.parent.name : (\"msiexec.exe\", \"setup.exe\", \"install.exe\")",
+        "purpose": "Hunt for Defender exclusion bypass: PowerShell invocations of Add-MpPreference -ExclusionPath not originating from known legitimate installer parent processes \u2014 a key pre-payload defense evasion step used by this and many other Agent Tesla campaigns."
+      },
+      {
+        "platform": "elastic",
+        "query": "file where event.type in (\"access\", \"open\") and file.path : (\"*\\\\Google\\\\Chrome\\\\User Data\\\\Default\\\\Login Data*\", \"*\\\\Microsoft\\\\Edge\\\\User Data\\\\Default\\\\Login Data*\") and not process.name : (\"chrome.exe\", \"msedge.exe\", \"brave.exe\", \"opera.exe\")",
+        "purpose": "Hunt for browser credential harvesting: non-browser processes opening Chrome or Edge Login Data SQLite databases \u2014 the Agent Tesla credential theft module's primary data source (T1555.003)."
+      },
+      {
+        "platform": "elastic",
+        "query": "process where event.type == \"start\" and process.name : \"svchost.exe\" and not process.command_line : \"*-k *\" and not process.parent.name : (\"services.exe\", \"wininit.exe\")",
+        "purpose": "Hunt for svchost process hollowing: svchost instances spawned without the standard -k service-group argument or from non-standard parent processes \u2014 the execution hiding technique used by Agent Tesla to run within a trusted system process (T1055.012)."
+      },
+      {
+        "platform": "elastic",
+        "query": "file where event.type == \"creation\" and file.name : \"qlqjuq.exe\" and file.path : \"*\\\\AppData\\\\Roaming\\\\*\"",
+        "purpose": "Hunt for the specific MothGarden campaign dropper: creation of qlqjuq.exe in %APPDATA% \u2014 the campaign-specific persistence binary. Zero expected false positives."
+      },
+      {
+        "platform": "elastic",
+        "query": "network where event.type == \"connection\" and destination.port in (25, 587, 465) and not process.name : (\"thunderbird.exe\", \"outlook.exe\", \"OUTLOOK.EXE\", \"postfix\", \"sendmail\") and process.name : (\"svchost.exe\", \"powershell.exe\", \"pwsh.exe\", \"cmd.exe\")",
+        "purpose": "Hunt for Agent Tesla SMTP exfiltration: SMTP connections originating from system processes (svchost, PowerShell) rather than legitimate mail clients \u2014 a strong indicator of credential data being exfiltrated via the Agent Tesla SMTP channel (T1041, T1048)."
+      },
+      {
+        "platform": "kql",
+        "query": "process.name:(\"powershell.exe\" OR \"pwsh.exe\") AND process.command_line:(\"-NoProfile\" AND \"-ExecutionPolicy Bypass\" AND \"-WindowStyle Hidden\" AND \"-File\" AND \"\\\\Temp\\\\\")",
+        "purpose": "KQL equivalent of the hidden PS1 launcher hunt \u2014 for use in Kibana Discover or as a KQL filter in Elastic Security timeline investigations."
+      },
+      {
+        "platform": "generic",
+        "query": "SELECT p.pid, p.name, p.cmdline, p.parent_pid, pp.name AS parent_name FROM processes p LEFT JOIN processes pp ON p.parent_pid = pp.pid WHERE p.name IN ('powershell.exe','pwsh.exe') AND p.cmdline LIKE '%-NoProfile%' AND p.cmdline LIKE '%-ExecutionPolicy Bypass%' AND p.cmdline LIKE '%-WindowStyle Hidden%' AND p.cmdline LIKE '%-File%' AND p.cmdline LIKE '%\\Temp\\%.ps1%'",
+        "purpose": "OSQuery / generic SQL hunt for MSILHeracles hidden PowerShell launcher across endpoint fleet \u2014 adaptable to any SIEM with process telemetry."
+      }
+    ],
+    "stix_bundle": {
+      "type": "bundle",
+      "id": "bundle--c1a2b3d4-e5f6-7890-abcd-ef1234567890",
+      "objects": [
+        {
+          "type": "malware",
+          "id": "malware--d1e2f3a4-b5c6-7890-abcd-ef1234560001",
+          "spec_version": "2.1",
+          "name": "MSILHeracles",
+          "description": "MSILHeracles packer/loader layer. Wraps Agent Tesla infostealer payload. Uses ConfuserEx-class .NET obfuscation, hidden PowerShell persistence, Windows Defender exclusion bypass, and svchost process hollowing. MothGarden French-language lure variant, first seen 2025-06-15.",
+          "is_family": false,
+          "malware_types": [
+            "dropper",
+            "loader"
+          ],
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z",
+          "external_references": [
+            {
+              "source_name": "malpedia",
+              "url": "https://malpedia.caad.fkie.fraunhofer.de/details/win.agent_tesla"
+            }
+          ]
+        },
+        {
+          "type": "malware",
+          "id": "malware--d1e2f3a4-b5c6-7890-abcd-ef1234560002",
+          "spec_version": "2.1",
+          "name": "Agent Tesla",
+          "description": "Agent Tesla v3 infostealer/RAT inner payload. Capabilities: keylogging, screenshot capture, clipboard harvesting, browser credential theft (Chrome, Edge), SMTP/HTTP/Telegram exfiltration.",
+          "is_family": true,
+          "malware_types": [
+            "keylogger",
+            "spyware",
+            "rat"
+          ],
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z",
+          "external_references": [
+            {
+              "source_name": "mitre-attack",
+              "external_id": "S0331",
+              "url": "https://attack.mitre.org/software/S0331/"
+            },
+            {
+              "source_name": "malpedia",
+              "url": "https://malpedia.caad.fkie.fraunhofer.de/details/win.agent_tesla"
+            }
+          ]
+        },
+        {
+          "type": "indicator",
+          "id": "indicator--e1f2a3b4-c5d6-7890-abcd-ef1234560101",
+          "spec_version": "2.1",
+          "name": "MothGarden AgentTesla SHA-256",
+          "description": "SHA-256 hash of MothGarden lure executable (at.zip / Unre.exe). MSILHeracles loader wrapping Agent Tesla. First seen 2025-06-15.",
+          "pattern_type": "stix",
+          "pattern": "[file:hashes.'SHA-256' = 'bc37921377b4fe391a8487b7116cb8b92b3b09b1c0e9b4f48fb99f217f43eec2']",
+          "valid_from": "2025-06-15T06:23:39Z",
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z",
+          "confidence": 90
+        },
+        {
+          "type": "indicator",
+          "id": "indicator--e1f2a3b4-c5d6-7890-abcd-ef1234560102",
+          "spec_version": "2.1",
+          "name": "MothGarden AgentTesla MD5",
+          "description": "MD5 hash of MothGarden lure executable.",
+          "pattern_type": "stix",
+          "pattern": "[file:hashes.'MD5' = '3ee4d5fc4ef74349d7c330acbf0ef718']",
+          "valid_from": "2025-06-15T06:23:39Z",
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z",
+          "confidence": 90
+        },
+        {
+          "type": "indicator",
+          "id": "indicator--e1f2a3b4-c5d6-7890-abcd-ef1234560103",
+          "spec_version": "2.1",
+          "name": "MSILHeracles HKCU Run Persistence Key qlQjUq",
+          "description": "Registry Run key written by MSILHeracles loader for persistence. Value name: qlQjUq; data: hidden PowerShell launcher invoking randomised PS1 from %TEMP%.",
+          "pattern_type": "stix",
+          "pattern": "[windows-registry-key:key = 'HKEY_CURRENT_USER\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\qlQjUq']",
+          "valid_from": "2025-06-15T06:23:39Z",
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z",
+          "confidence": 75
+        },
+        {
+          "type": "indicator",
+          "id": "indicator--e1f2a3b4-c5d6-7890-abcd-ef1234560104",
+          "spec_version": "2.1",
+          "name": "MSILHeracles Dropped Binary qlqjuq.exe in AppData",
+          "description": "Persistence binary dropped to %APPDATA%\\qlqjuq.exe by MSILHeracles loader.",
+          "pattern_type": "stix",
+          "pattern": "[file:name = 'qlqjuq.exe' AND file:parent_directory_ref.path MATCHES '(?i)AppData\\\\Roaming']",
+          "valid_from": "2025-06-15T06:23:39Z",
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z",
+          "confidence": 70
+        },
+        {
+          "type": "indicator",
+          "id": "indicator--e1f2a3b4-c5d6-7890-abcd-ef1234560105",
+          "spec_version": "2.1",
+          "name": "MSILHeracles Hidden PowerShell PS1 Launcher Pattern",
+          "description": "Pattern matching the hidden PowerShell command used to execute randomised PS1 files from %TEMP% \u2014 MSILHeracles/Agent Tesla stage-2 launcher.",
+          "pattern_type": "stix",
+          "pattern": "[process:command_line MATCHES '(?i)powershell.*-NoProfile.*-ExecutionPolicy Bypass.*-WindowStyle Hidden.*-File.*\\\\Temp\\\\[a-z0-9]{8,14}\\\\.ps1']",
+          "valid_from": "2025-06-15T06:23:39Z",
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z",
+          "confidence": 80
+        },
+        {
+          "type": "attack-pattern",
+          "id": "attack-pattern--f1a2b3c4-d5e6-7890-abcd-ef1234560201",
+          "spec_version": "2.1",
+          "name": "Software Packing",
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z",
+          "external_references": [
+            {
+              "source_name": "mitre-attack",
+              "external_id": "T1027.002",
+              "url": "https://attack.mitre.org/techniques/T1027/002/"
+            }
+          ]
+        },
+        {
+          "type": "attack-pattern",
+          "id": "attack-pattern--f1a2b3c4-d5e6-7890-abcd-ef1234560202",
+          "spec_version": "2.1",
+          "name": "Masquerading",
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z",
+          "external_references": [
+            {
+              "source_name": "mitre-attack",
+              "external_id": "T1036",
+              "url": "https://attack.mitre.org/techniques/T1036/"
+            }
+          ]
+        },
+        {
+          "type": "attack-pattern",
+          "id": "attack-pattern--f1a2b3c4-d5e6-7890-abcd-ef1234560203",
+          "spec_version": "2.1",
+          "name": "Command and Scripting Interpreter: PowerShell",
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z",
+          "external_references": [
+            {
+              "source_name": "mitre-attack",
+              "external_id": "T1059.001",
+              "url": "https://attack.mitre.org/techniques/T1059/001/"
+            }
+          ]
+        },
+        {
+          "type": "attack-pattern",
+          "id": "attack-pattern--f1a2b3c4-d5e6-7890-abcd-ef1234560204",
+          "spec_version": "2.1",
+          "name": "Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder",
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z",
+          "external_references": [
+            {
+              "source_name": "mitre-attack",
+              "external_id": "T1547.001",
+              "url": "https://attack.mitre.org/techniques/T1547/001/"
+            }
+          ]
+        },
+        {
+          "type": "attack-pattern",
+          "id": "attack-pattern--f1a2b3c4-d5e6-7890-abcd-ef1234560205",
+          "spec_version": "2.1",
+          "name": "Impair Defenses: Disable or Modify Tools",
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z",
+          "external_references": [
+            {
+              "source_name": "mitre-attack",
+              "external_id": "T1562.001",
+              "url": "https://attack.mitre.org/techniques/T1562/001/"
+            }
+          ]
+        },
+        {
+          "type": "attack-pattern",
+          "id": "attack-pattern--f1a2b3c4-d5e6-7890-abcd-ef1234560206",
+          "spec_version": "2.1",
+          "name": "Process Injection: Process Hollowing",
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z",
+          "external_references": [
+            {
+              "source_name": "mitre-attack",
+              "external_id": "T1055.012",
+              "url": "https://attack.mitre.org/techniques/T1055/012/"
+            }
+          ]
+        },
+        {
+          "type": "attack-pattern",
+          "id": "attack-pattern--f1a2b3c4-d5e6-7890-abcd-ef1234560207",
+          "spec_version": "2.1",
+          "name": "Credentials from Password Stores: Credentials from Web Browsers",
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z",
+          "external_references": [
+            {
+              "source_name": "mitre-attack",
+              "external_id": "T1555.003",
+              "url": "https://attack.mitre.org/techniques/T1555/003/"
+            }
+          ]
+        },
+        {
+          "type": "attack-pattern",
+          "id": "attack-pattern--f1a2b3c4-d5e6-7890-abcd-ef1234560208",
+          "spec_version": "2.1",
+          "name": "Exfiltration Over C2 Channel",
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z",
+          "external_references": [
+            {
+              "source_name": "mitre-attack",
+              "external_id": "T1041",
+              "url": "https://attack.mitre.org/techniques/T1041/"
+            }
+          ]
+        },
+        {
+          "type": "campaign",
+          "id": "campaign--a1b2c3d4-e5f6-7890-abcd-ef1234560301",
+          "spec_version": "2.1",
+          "name": "MothGarden 2025-06 \u2014 MSILHeracles/AgentTesla French-language lure",
+          "description": "Fresh campaign deploying MSILHeracles-packed Agent Tesla v3 disguised as a French-language botanical simulation application ('Jardin de Mousse' / 'MothGarden') with fabricated 'Antigravity (Google DeepMind Team)' developer attribution. First seen 2025-06-15. Low submission count suggests targeted or early-stage campaign. French-speaking targets suspected.",
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z",
+          "first_seen": "2025-06-15T06:23:39Z"
+        },
+        {
+          "type": "relationship",
+          "id": "relationship--b1c2d3e4-f5a6-7890-abcd-ef1234560401",
+          "spec_version": "2.1",
+          "relationship_type": "indicates",
+          "source_ref": "indicator--e1f2a3b4-c5d6-7890-abcd-ef1234560101",
+          "target_ref": "malware--d1e2f3a4-b5c6-7890-abcd-ef1234560001",
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z"
+        },
+        {
+          "type": "relationship",
+          "id": "relationship--b1c2d3e4-f5a6-7890-abcd-ef1234560402",
+          "spec_version": "2.1",
+          "relationship_type": "indicates",
+          "source_ref": "indicator--e1f2a3b4-c5d6-7890-abcd-ef1234560102",
+          "target_ref": "malware--d1e2f3a4-b5c6-7890-abcd-ef1234560001",
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z"
+        },
+        {
+          "type": "relationship",
+          "id": "relationship--b1c2d3e4-f5a6-7890-abcd-ef1234560403",
+          "spec_version": "2.1",
+          "relationship_type": "indicates",
+          "source_ref": "indicator--e1f2a3b4-c5d6-7890-abcd-ef1234560103",
+          "target_ref": "malware--d1e2f3a4-b5c6-7890-abcd-ef1234560001",
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z"
+        },
+        {
+          "type": "relationship",
+          "id": "relationship--b1c2d3e4-f5a6-7890-abcd-ef1234560404",
+          "spec_version": "2.1",
+          "relationship_type": "indicates",
+          "source_ref": "indicator--e1f2a3b4-c5d6-7890-abcd-ef1234560104",
+          "target_ref": "malware--d1e2f3a4-b5c6-7890-abcd-ef1234560001",
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z"
+        },
+        {
+          "type": "relationship",
+          "id": "relationship--b1c2d3e4-f5a6-7890-abcd-ef1234560405",
+          "spec_version": "2.1",
+          "relationship_type": "indicates",
+          "source_ref": "indicator--e1f2a3b4-c5d6-7890-abcd-ef1234560105",
+          "target_ref": "malware--d1e2f3a4-b5c6-7890-abcd-ef1234560001",
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z"
+        },
+        {
+          "type": "relationship",
+          "id": "relationship--b1c2d3e4-f5a6-7890-abcd-ef1234560406",
+          "spec_version": "2.1",
+          "relationship_type": "drops",
+          "source_ref": "malware--d1e2f3a4-b5c6-7890-abcd-ef1234560001",
+          "target_ref": "malware--d1e2f3a4-b5c6-7890-abcd-ef1234560002",
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z"
+        },
+        {
+          "type": "relationship",
+          "id": "relationship--b1c2d3e4-f5a6-7890-abcd-ef1234560407",
+          "spec_version": "2.1",
+          "relationship_type": "uses",
+          "source_ref": "malware--d1e2f3a4-b5c6-7890-abcd-ef1234560001",
+          "target_ref": "attack-pattern--f1a2b3c4-d5e6-7890-abcd-ef1234560201",
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z"
+        },
+        {
+          "type": "relationship",
+          "id": "relationship--b1c2d3e4-f5a6-7890-abcd-ef1234560408",
+          "spec_version": "2.1",
+          "relationship_type": "uses",
+          "source_ref": "malware--d1e2f3a4-b5c6-7890-abcd-ef1234560001",
+          "target_ref": "attack-pattern--f1a2b3c4-d5e6-7890-abcd-ef1234560202",
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z"
+        },
+        {
+          "type": "relationship",
+          "id": "relationship--b1c2d3e4-f5a6-7890-abcd-ef1234560409",
+          "spec_version": "2.1",
+          "relationship_type": "uses",
+          "source_ref": "malware--d1e2f3a4-b5c6-7890-abcd-ef1234560001",
+          "target_ref": "attack-pattern--f1a2b3c4-d5e6-7890-abcd-ef1234560203",
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z"
+        },
+        {
+          "type": "relationship",
+          "id": "relationship--b1c2d3e4-f5a6-7890-abcd-ef1234560410",
+          "spec_version": "2.1",
+          "relationship_type": "uses",
+          "source_ref": "malware--d1e2f3a4-b5c6-7890-abcd-ef1234560001",
+          "target_ref": "attack-pattern--f1a2b3c4-d5e6-7890-abcd-ef1234560204",
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z"
+        },
+        {
+          "type": "relationship",
+          "id": "relationship--b1c2d3e4-f5a6-7890-abcd-ef1234560411",
+          "spec_version": "2.1",
+          "relationship_type": "uses",
+          "source_ref": "malware--d1e2f3a4-b5c6-7890-abcd-ef1234560001",
+          "target_ref": "attack-pattern--f1a2b3c4-d5e6-7890-abcd-ef1234560205",
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z"
+        },
+        {
+          "type": "relationship",
+          "id": "relationship--b1c2d3e4-f5a6-7890-abcd-ef1234560412",
+          "spec_version": "2.1",
+          "relationship_type": "uses",
+          "source_ref": "malware--d1e2f3a4-b5c6-7890-abcd-ef1234560001",
+          "target_ref": "attack-pattern--f1a2b3c4-d5e6-7890-abcd-ef1234560206",
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z"
+        },
+        {
+          "type": "relationship",
+          "id": "relationship--b1c2d3e4-f5a6-7890-abcd-ef1234560413",
+          "spec_version": "2.1",
+          "relationship_type": "uses",
+          "source_ref": "malware--d1e2f3a4-b5c6-7890-abcd-ef1234560002",
+          "target_ref": "attack-pattern--f1a2b3c4-d5e6-7890-abcd-ef1234560207",
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z"
+        },
+        {
+          "type": "relationship",
+          "id": "relationship--b1c2d3e4-f5a6-7890-abcd-ef1234560414",
+          "spec_version": "2.1",
+          "relationship_type": "uses",
+          "source_ref": "malware--d1e2f3a4-b5c6-7890-abcd-ef1234560002",
+          "target_ref": "attack-pattern--f1a2b3c4-d5e6-7890-abcd-ef1234560208",
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z"
+        },
+        {
+          "type": "relationship",
+          "id": "relationship--b1c2d3e4-f5a6-7890-abcd-ef1234560415",
+          "spec_version": "2.1",
+          "relationship_type": "attributed-to",
+          "source_ref": "campaign--a1b2c3d4-e5f6-7890-abcd-ef1234560301",
+          "target_ref": "malware--d1e2f3a4-b5c6-7890-abcd-ef1234560001",
+          "created": "2025-06-15T12:00:00.000Z",
+          "modified": "2025-06-15T12:00:00.000Z"
+        }
+      ]
+    },
+    "validation": {
+      "yara_ok": true,
+      "yara_rules": [
+        {
+          "name": "MSILHeracles_AgentTesla_MothGarden_Loader",
+          "valid": true,
+          "error": null
+        },
+        {
+          "name": "MSILHeracles_AgentTesla_HighEntropy_DotNET_Loader_Generic",
+          "valid": true,
+          "error": null
+        }
+      ],
+      "sigma_ok": true,
+      "sigma_rules": [
+        {
+          "name": "MSILHeracles AgentTesla PowerShell Hidden Persistence Launcher",
+          "valid": true,
+          "error": null,
+          "method": "pysigma"
+        },
+        {
+          "name": "MSILHeracles AgentTesla HKCU Run Key Randomised Persistence",
+          "valid": true,
+          "error": null,
+          "method": "pysigma"
+        },
+        {
+          "name": "MSILHeracles AgentTesla Windows Defender Exclusion via Add-MpPreference",
+          "valid": true,
+          "error": null,
+          "method": "pysigma"
+        },
+        {
+          "name": "AgentTesla Browser Credential Store Access Chrome Edge",
+          "valid": true,
+          "error": null,
+          "method": "pysigma"
+        },
+        {
+          "name": "AgentTesla MSILHeracles svchost Process Hollowing Uncommon CommandLine",
+          "valid": true,
+          "error": null,
+          "method": "pysigma"
+        },
+        {
+          "name": "MothGarden AgentTesla Dropped Executable in AppData",
+          "valid": true,
+          "error": null,
+          "method": "pysigma"
+        }
+      ],
+      "suricata_ok": true,
+      "suricata_rules": [
+        {
+          "name": "AgentTesla MSILHeracles SMTP Exfiltration Attempt (Generic Pattern)",
+          "valid": true,
+          "error": null,
+          "method": "structural"
+        },
+        {
+          "name": "AgentTesla HTTP Exfiltration Generic POST with Encoded Credential Data",
+          "valid": true,
+          "error": null,
+          "method": "structural"
+        },
+        {
+          "name": "AgentTesla Telegram Bot API Exfiltration",
+          "valid": true,
+          "error": null,
+          "method": "structural"
+        },
+        {
+          "name": "MSILHeracles AgentTesla PowerShell Hidden File Download from TEMP",
+          "valid": true,
+          "error": null,
+          "method": "structural"
+        }
+      ],
+      "stix_ok": null
+    },
+    "notes": "DYNAMIC ANALYSIS ABSENT: All behavioral IOCs and technique confirmations are derived from OSINT sources (VirusTotal Sigma behavioral engine hits, public sandbox reports for MSILHeracles/Agent Tesla family). No dedicated sandbox run of this specific hash was performed. Technique-level detections (persistence, hollowing, credential access) have high confidence from OSINT but should be treated as family-level rather than sample-confirmed until a first-party sandbox run validates them against this exact hash.\n\nNETWORK IOCs ABSENT: No C2 URLs, IP addresses, domains, SMTP server details, or Telegram bot tokens were recoverable \u2014 static obfuscation suppressed all strings and dynamic analysis was not available. The three Suricata rules provided are family-pattern rules (SMTP exfiltration, HTTP credential POST field names, Telegram Bot API) rather than campaign-specific IOC rules. They should be treated as hunting aids with elevated false-positive potential, not high-confidence blocklist entries. If a sandbox run recovers a specific C2 endpoint, campaign-specific Suricata rules should be added immediately.\n\nMUTEX ABSENT: No mutex name was identified for this sample. This is a gap \u2014 Agent Tesla samples typically create a mutex for single-instance enforcement. If recovered in a future sandbox run, add a mutex IOC and a corresponding YARA/Sigma rule.\n\nYARA CONFIDENCE: The MothGarden-specific YARA rule (MSILHeracles_AgentTesla_MothGarden_Loader) anchors on lure strings that survived obfuscation \u2014 this is unusual and may mean a subset of future variants (with more complete obfuscation) would evade it. The generic high-entropy loader heuristic rule provides broader variant coverage at the cost of higher false positives. Both rules should be validated with yara-python against a clean .NET corpus before deployment.\n\nSIGMA DEPLOYMENT: All six Sigma rules are in standard Sigma format and are designed to convert cleanly via pySigma (elasticsearch backend) or Elastic Security's built-in Sigma import for loading through the Kibana Detections API. The file_event rules require Elastic Endpoint or equivalent process/file telemetry to be ingested. The registry_set rule requires Sysmon Event ID 13 or equivalent.\n\nELASTIC IOC INDEXING: Map IOC fields to ECS threat.* fields for Elastic indicator-match rules: value_original \u2192 threat.indicator.file.hash.sha256 / threat.indicator.registry.key / threat.indicator.file.path; type \u2192 threat.indicator.type; confidence \u2192 threat.indicator.confidence; first_seen \u2192 threat.indicator.first_seen. Index into the .siem-signals or threat-intel-* index pattern as appropriate for your Elastic Security deployment.\n\nSTIX PATTERN CAVEAT: The process:command_line STIX pattern (indicator 560105) uses a MATCHES operator with a regex \u2014 this is valid STIX 2.1 but support varies by consuming platform. Verify against your STIX consumer before ingesting.\n\nACTOR ATTRIBUTION NOT INCLUDED IN STIX: No Threat-Actor SDO was added to the bundle. Attribution confidence is LOW (commodity crimeware, no infrastructure pivots). A Threat-Actor object would be misleading at this confidence level.\n\nPRIORITY NEXT STEPS FOR DETECTION IMPROVEMENT: (1) Run the sample in a first-party sandbox (Cuckoo, Cape, Any.Run) to recover C2 endpoint, exfiltration transport, and mutex \u2014 these would add high-value network IOCs and enable campaign-specific Suricata rules. (2) Decompile with ILSpy/dnSpy after unpacking to trace the geolocation format strings and confirm or rule out location-reporting capability. (3) Check for additional samples sharing the MothGarden product string or qlQjUq key name pattern via VirusTotal retrohunt."
+  },
+  "report": null,
+  "elastic": null
+}

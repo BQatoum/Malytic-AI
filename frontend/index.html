@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Malware Analysis Pipeline — Upload</title>
+</head>
+<body>
+  <h1>Submit Sample</h1>
+  <form id="upload-form" enctype="multipart/form-data">
+    <label for="file">Sample file:</label>
+    <input type="file" id="file" name="file" required />
+    <br /><br />
+
+    <label for="password">Archive password (optional):</label>
+    <input type="text" id="password" name="password" placeholder="e.g. infected" autocomplete="off" />
+    <br /><br />
+
+    <label for="report_format">Report format:</label>
+    <select id="report_format" name="report_format">
+      <option value="markdown" selected>Markdown</option>
+      <option value="docx">DOCX</option>
+      <option value="pdf">PDF</option>
+    </select>
+    <br /><br />
+
+    <button type="submit">Analyze</button>
+  </form>
+  <div id="status"></div>
+
+  <script>
+    document.getElementById('upload-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = new FormData(e.target);
+      // Don't send an empty password field — let the backend use its defaults.
+      if (!form.get('password')) form.delete('password');
+      const statusEl = document.getElementById('status');
+      statusEl.textContent = 'Submitting…';
+      try {
+        const res = await fetch('/api/analyze', { method: 'POST', body: form });
+        const data = await res.json();
+        if (res.ok) {
+          statusEl.textContent = `Case created: ${data.case_id}`;
+          window.location.href = `/results.html?case_id=${encodeURIComponent(data.case_id)}`;
+        } else {
+          statusEl.textContent = `Error ${res.status}: ${data.detail}`;
+        }
+      } catch (err) {
+        statusEl.textContent = `Network error: ${err}`;
+      }
+    });
+  </script>
+</body>
+</html>

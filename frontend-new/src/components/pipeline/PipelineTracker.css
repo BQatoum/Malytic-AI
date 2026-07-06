@@ -1,0 +1,143 @@
+.pipeline-tracker {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-6);
+}
+
+.pipeline-tracker__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-5);
+}
+
+.pipeline-tracker__title {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.pipeline-tracker__pill {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 3px 10px;
+  border-radius: 100px;
+  border: 1px solid;
+}
+.pipeline-tracker__pill--running {
+  color: var(--status-running);
+  background: rgba(245,158,11,0.08);
+  border-color: rgba(245,158,11,0.25);
+}
+.pipeline-tracker__pill--done {
+  color: var(--status-done);
+  background: var(--glow-done);
+  border-color: rgba(34,197,94,0.25);
+}
+.pipeline-tracker__pill--failed {
+  color: var(--status-running);
+  background: var(--glow-running);
+  border-color: rgba(245,158,11,0.25);
+}
+
+/* Track */
+.pipeline-tracker__track {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  flex-wrap: wrap;
+  row-gap: var(--sp-4);
+}
+
+.pipeline-tracker__step {
+  display: flex;
+  align-items: center;
+}
+
+/* Connector line between steps */
+.pipeline-tracker__connector {
+  width: 24px;
+  height: 1px;
+  flex-shrink: 0;
+}
+.pipeline-tracker__connector--done { background: var(--status-done); opacity: 0.4; }
+.pipeline-tracker__connector--dim  { background: var(--border); }
+
+/* Phase node */
+.phase-node {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 8px 12px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--border-dim);
+  background: var(--bg-base);
+  min-width: 100px;
+  transition: border-color var(--dur-base), box-shadow var(--dur-base);
+}
+
+.phase-node--pending {
+  opacity: 0.45;
+}
+
+.phase-node--running {
+  border-color: rgba(245, 158, 11, 0.35);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.1);
+}
+
+.phase-node--done {
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+.phase-node--failed {
+  border-color: rgba(239, 68, 68, 0.35);
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.1);
+}
+
+/* Icons */
+.phase-node__icon { flex-shrink: 0; }
+.phase-node--pending  .phase-node__icon { color: var(--status-pending); }
+.phase-node--running  .phase-node__icon { color: var(--status-running); }
+.phase-node--done     .phase-node__icon { color: var(--status-done); }
+.phase-node--failed   .phase-node__icon { color: var(--status-failed); }
+
+.phase-node__spin {
+  animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Labels */
+.phase-node__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.phase-node__label {
+  font-family: var(--font-mono);
+  font-size: 0.725rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--text-primary);
+}
+.phase-node--pending .phase-node__label { color: var(--text-faint); }
+
+.phase-node__error {
+  font-size: 0.65rem;
+  color: var(--status-failed);
+  font-family: var(--font-mono);
+  line-height: 1.3;
+}
+
+@media (max-width: 900px) {
+  .pipeline-tracker__track { flex-direction: column; }
+  .pipeline-tracker__connector { display: none; }
+  .pipeline-tracker__step { width: 100%; }
+  .phase-node { width: 100%; }
+}

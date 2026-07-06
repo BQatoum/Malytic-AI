@@ -1,0 +1,84 @@
+/* ─── Design tokens — extracted from Malware AI Analyzer reference ─────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=Manrope:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* ── Backgrounds ──────────────────────────────────────────────────────────── */
+  --bg-base:    #070b14;
+  --bg-surface: #0a0e18;       /* card / nav backgrounds */
+  --bg-deep:    #050509;
+
+  /* Glass tiers (opacity-matched to reference) */
+  --glass-atm:    rgba(255,255,255,0.025); /* atmospheric: hero, scan ring backdrop  */
+  --glass-data:   rgba(255,255,255,0.025); /* data-dense: tables, rule blocks        */
+  --glass-solid:  rgba(10,14,24,0.97);    /* fully opaque: pre code blocks          */
+
+  --glass-blur:    14px;
+  --glass-blur-lg: 16px;
+
+  /* ── Borders ──────────────────────────────────────────────────────────────── */
+  --border-glass:    rgba(255,255,255,0.07);
+  --border-glass-hi: rgba(255,255,255,0.12);
+  --border-red:      rgba(225,29,42,0.40);
+  --border-red-hi:   rgba(225,29,42,0.65);
+
+  /* ── Text ─────────────────────────────────────────────────────────────────── */
+  --text-primary: #ffffff;
+  --text-muted:   rgba(255,255,255,0.55);    /* body / descriptions */
+  --text-sub:     rgba(255,255,255,0.50);    /* nav inactive, section subtitles */
+  --text-faint:   rgba(255,255,255,0.42);    /* hints, helper text */
+  --text-ghost:   rgba(255,255,255,0.25);    /* very dim labels */
+
+  /* ── Accent — crimson ─────────────────────────────────────────────────────── */
+  --accent:       #E11D2A;
+  --accent-dim:   rgba(225,29,42,0.10);
+  --accent-glow:  rgba(225,29,42,0.55);
+  --accent-soft:  rgba(225,29,42,0.32);
+
+  /* ── Status ───────────────────────────────────────────────────────────────── */
+  --status-running: #E11D2A;        /* red + pulse           */
+  --status-done:    #2FBF71;        /* reference-matched green */
+  --status-failed:  #E11D2A;        /* red, static X, no pulse */
+  --status-pending: rgba(255,255,255,0.18);
+
+  --glow-running: rgba(225,29,42,  0.22);
+  --glow-done:    rgba(47,191,113, 0.18);
+  --glow-failed:  rgba(225,29,42,  0.12);
+
+  /* ── Typography ───────────────────────────────────────────────────────────── */
+  --font-display: 'Archivo',       sans-serif;   /* headings — 700/800 */
+  --font-ui:      'Manrope',       sans-serif;   /* nav, labels, body  */
+  --font-mono:    'JetBrains Mono', monospace;   /* hashes, code       */
+
+  /* ── Spacing (4px grid) ───────────────────────────────────────────────────── */
+  --sp-1:  4px;  --sp-2:  8px;  --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 20px;  --sp-6: 24px;  --sp-8: 32px; --sp-10: 40px;
+  --sp-12: 48px; --sp-14: 56px; --sp-16: 64px; --sp-20: 80px;
+
+  /* ── Radius ───────────────────────────────────────────────────────────────── */
+  --r-sm:  4px;
+  --r-md:  8px;
+  --r-lg:  14px;
+  --r-xl:  18px;
+  --r-2xl: 24px;
+  --r-pill: 999px;
+
+  /* ── Z-layers ─────────────────────────────────────────────────────────────── */
+  --z-canvas:   0;
+  --z-bg:       1;      /* hex corners, bug motifs */
+  --z-content:  10;
+  --z-nav:      20;
+  --z-modal:    100;
+
+  /* ── Motion ───────────────────────────────────────────────────────────────── */
+  --ease-out:  cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-snap: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast:  150ms;
+  --dur-base:  260ms;
+  --dur-slow:  400ms;
+
+  /* ── Compat shims (untouched pages that still use old variable names) ─────── */
+  --bg-elevated: rgba(12,18,32,0.92);
+  --border:      rgba(255,255,255,0.09);
+  --border-dim:  rgba(255,255,255,0.05);
+}
