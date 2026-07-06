@@ -1,8 +1,8 @@
 # Malytic.AI
 
-**An AI-powered malware analysis platform where AI acts as the analyst — not just a scanner.**
+**An AI-powered malware analysis platform where Claude acts as the analyst — not just a scanner.**
 
-Malytic.AI takes a malware sample and runs it through a seven-phase analysis pipeline, using an AI reasoning engine to interpret evidence, correlate findings across phases, reach its own verdict, and produce a complete threat-intelligence package — a dual-audience report plus validated, SIEM-ready detection rules — automatically.
+Malytic.AI takes a malware sample and runs it through a seven-phase analysis pipeline, using Claude as the reasoning engine to interpret evidence, correlate findings across phases, reach its own verdict, and produce a complete threat-intelligence package — a dual-audience report plus validated, SIEM-ready detection rules — automatically.
 
 ![Malytic.AI](screenshots/home.png)
 
@@ -10,17 +10,23 @@ Malytic.AI takes a malware sample and runs it through a seven-phase analysis pip
 
 ## The Problem
 
-Manual malware analysis doesn't scale. A skilled analyst can spend hours triaging a single sample, SOC teams face hundreds of alerts a day, and analysis quality varies with whoever is on shift. By the time a human writes a detection rule for a new threat, the attacker has already moved on.
+Malware never stops arriving, but expert analysts are scarce and slow to scale. A single sample can take a skilled analyst two to four hours to fully triage — reverse-engineering the binary, detonating it safely, correlating behavior against known threats, and writing detection rules. Meanwhile, a SOC receives hundreds or thousands of alerts a day. The result is a permanent backlog: most samples are never deeply analyzed, and the ones that are depend heavily on which analyst happened to pick them up.
 
-Malytic.AI addresses this by putting an AI analyst at the center of the pipeline — giving every SOC team the analytical depth of a senior threat analyst, on every sample.
+This creates three compounding gaps:
+
+- **Speed.** By the time a human finishes analyzing a new threat and writes a detection for it, the attacker has often already rotated infrastructure, repacked the payload, or moved on to the next victim.
+- **Consistency.** Analysis quality varies with experience and fatigue. A junior and a senior analyst can produce very different conclusions from the same file — and even the same analyst produces different depth at hour one versus hour eight.
+- **Coverage.** Modern malware is deliberately evasive — packed, obfuscated, sandbox-aware, and designed to look clean to automated tools. Signature-based scanners miss what they haven't seen before, and analysts simply cannot manually inspect everything that comes in.
+
+Malytic.AI closes these gaps by putting Claude — reasoning as an analyst — at the center of an automated pipeline, giving every SOC team the analytical depth of a senior threat analyst on every single sample, in minutes instead of hours.
 
 ---
 
-## Core Concept: AI as the Analyst
+## Core Concept: Claude as the Analyst
 
-Most malware tools extract data and hand you raw output to interpret. Malytic.AI is different: the AI **reasons over the evidence** at every phase. Tools only extract facts; the sandbox only executes the sample; the AI interprets, correlates, and concludes.
+Most malware tools extract data and hand you raw output to interpret. Malytic.AI is different: **Claude reasons over the evidence** at every phase. Tools only extract facts; the sandbox only executes the sample; Claude interprets, correlates, and concludes.
 
-The AI reaches its **own verdict** and cross-checks it against the tool and sandbox verdicts — so when an evasive sample produces a "clean" sandbox result, the platform can recognize that silence itself as suspicious, rather than blindly trusting it.
+Claude reaches its **own verdict** and cross-checks it against the tool and sandbox verdicts — so when an evasive sample produces a "clean" sandbox result, the platform can recognize that silence itself as suspicious, rather than blindly trusting it.
 
 Each analysis phase is driven by a dedicated skill file (a structured system prompt), not hardcoded family logic — keeping the platform **file-type and family agnostic**. It has been validated across diverse real samples: infostealers, RATs, ransomware, malicious Office macro documents, and PDFs.
 
@@ -33,10 +39,10 @@ Every sample flows through a JSON "case file" that persists in a database — ea
 | # | Phase | What it does |
 |---|-------|--------------|
 | 1 | **Intake** | Inert byte handling, hashing, file-type detection, archive extraction, routing (PE / Office / PDF) |
-| 2 | **Static Analysis** | Type-appropriate extraction (PE, Office macros, PDF structure) — the AI interprets the raw facts |
-| 3 | **Dynamic Analysis** | Live sandbox detonation — process behavior, network/C2, PCAP, and screenshots read by AI vision |
+| 2 | **Static Analysis** | Type-appropriate extraction (PE, Office macros, PDF structure) — Claude interprets the raw facts |
+| 3 | **Dynamic Analysis** | Live detonation in the Triage cloud sandbox — process behavior, network/C2, PCAP, and screenshots read by Claude's vision |
 | 4 | **OSINT** | Threat-intelligence enrichment (reputation, known-family intelligence) |
-| 5 | **Correlation / Attribution** | The AI fuses all phases into a verdict, family identification, and MITRE ATT&CK mapping |
+| 5 | **Correlation / Attribution** | Claude fuses all phases into a verdict, family identification, and MITRE ATT&CK mapping |
 | 6 | **Detection Engineering** | Generates and validates YARA, Sigma, and Suricata rules (with auto-repair) |
 | 7 | **Reporting + SIEM Push** | Produces a threat-intel report and pushes IOCs + detection rules into Elastic |
 
@@ -74,11 +80,11 @@ IOCs and detection rules land directly in Kibana, ready for threat hunting and a
 
 | Layer | Technology |
 |-------|-----------|
-| Analysis engine | AI reasoning model (skills-based, one SKILL.md per phase) |
+| Analysis engine | Claude (skills-based — one SKILL.md per phase) |
 | Backend | FastAPI (async), background-task pipeline |
 | Case storage | SQLite (persistent case files, restart-safe) |
 | Frontend | React + Vite (single-page dashboard) |
-| Sandbox | Cloud sandbox detonation |
+| Sandbox | Triage cloud sandbox |
 | SIEM | Elasticsearch + Kibana |
 | Detection | YARA, Sigma, Suricata (with real validation + auto-repair) |
 
@@ -86,10 +92,10 @@ IOCs and detection rules land directly in Kibana, ready for threat hunting and a
 
 ## Key Design Principles
 
-- **AI as analyst, not relay** — the AI reaches its own conclusions and cross-checks tool/sandbox verdicts.
+- **Claude as analyst, not relay** — Claude reaches its own conclusions and cross-checks tool/sandbox verdicts.
 - **Skills, not hardcoded logic** — each phase loads a structured skill, keeping the platform general across file types and families.
 - **Honest confidence** — the platform reports how sure it is, and fails gracefully rather than fabricating.
-- **Safety first** — samples are handled inert; detonation happens only in an isolated cloud sandbox; all indicators are defanged in reports.
+- **Safety first** — samples are handled inert; detonation happens only in the isolated Triage cloud sandbox; all indicators are defanged in reports.
 - **Validated detection** — generated rules are actually compiled/parsed and auto-repaired before deployment, so broken rules never reach the SIEM.
 
 ---
